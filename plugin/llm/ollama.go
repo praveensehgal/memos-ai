@@ -224,6 +224,15 @@ func (p *OllamaProvider) Summarize(ctx context.Context, req *SummarizeRequest) (
 	return p.DefaultSummarize(ctx, p, req)
 }
 
+// ToProto converts the provider configuration to proto format.
+func (p *OllamaProvider) ToProto() *storepb.LLMOllamaConfig {
+	return &storepb.LLMOllamaConfig{
+		Host:           p.host,
+		DefaultModel:   p.defaultModel,
+		EmbeddingModel: p.embeddingModel,
+	}
+}
+
 // CheckHealth verifies the Ollama server is reachable.
 func (p *OllamaProvider) CheckHealth(ctx context.Context) error {
 	if !p.IsConfigured(ctx) {

@@ -235,6 +235,16 @@ func (p *OpenAIProvider) Summarize(ctx context.Context, req *SummarizeRequest) (
 	return p.DefaultSummarize(ctx, p, req)
 }
 
+// ToProto converts the provider configuration to proto format.
+func (p *OpenAIProvider) ToProto() *storepb.LLMOpenAIConfig {
+	return &storepb.LLMOpenAIConfig{
+		ApiKey:         p.apiKey,
+		BaseUrl:        p.baseURL,
+		DefaultModel:   p.defaultModel,
+		EmbeddingModel: p.embeddingModel,
+	}
+}
+
 // isOpenAIChatModel checks if a model ID is a chat model.
 func isOpenAIChatModel(id string) bool {
 	prefixes := []string{"gpt-4", "gpt-3.5", "o1", "chatgpt"}
