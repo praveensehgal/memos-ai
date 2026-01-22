@@ -9,6 +9,8 @@ import {
   InstanceSetting_GeneralSetting,
   InstanceSetting_GeneralSettingSchema,
   InstanceSetting_Key,
+  InstanceSetting_LLMSetting,
+  InstanceSetting_LLMSettingSchema,
   InstanceSetting_MemoRelatedSetting,
   InstanceSetting_MemoRelatedSettingSchema,
   InstanceSetting_StorageSetting,
@@ -33,6 +35,7 @@ interface InstanceContextValue extends InstanceState {
   generalSetting: InstanceSetting_GeneralSetting;
   memoRelatedSetting: InstanceSetting_MemoRelatedSetting;
   storageSetting: InstanceSetting_StorageSetting;
+  llmSetting: InstanceSetting_LLMSetting;
   initialize: () => Promise<void>;
   fetchSetting: (key: InstanceSetting_Key) => Promise<void>;
   updateSetting: (setting: InstanceSetting) => Promise<void>;
@@ -71,6 +74,14 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
       return setting.value.value;
     }
     return create(InstanceSetting_StorageSettingSchema, {});
+  }, [state.settings]);
+
+  const llmSetting = useMemo((): InstanceSetting_LLMSetting => {
+    const setting = state.settings.find((s) => s.name === `${instanceSettingNamePrefix}LLM`);
+    if (setting?.value.case === "llmSetting") {
+      return setting.value.value;
+    }
+    return create(InstanceSetting_LLMSettingSchema, {});
   }, [state.settings]);
 
   const initialize = useCallback(async () => {
@@ -133,11 +144,12 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
       generalSetting,
       memoRelatedSetting,
       storageSetting,
+      llmSetting,
       initialize,
       fetchSetting,
       updateSetting,
     }),
-    [state, generalSetting, memoRelatedSetting, storageSetting, initialize, fetchSetting, updateSetting],
+    [state, generalSetting, memoRelatedSetting, storageSetting, llmSetting, initialize, fetchSetting, updateSetting],
   );
 
   return <InstanceContext.Provider value={value}>{children}</InstanceContext.Provider>;

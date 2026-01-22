@@ -2162,6 +2162,8 @@ components:
                     $ref: '#/components/schemas/InstanceSetting_StorageSetting'
                 memoRelatedSetting:
                     $ref: '#/components/schemas/InstanceSetting_MemoRelatedSetting'
+                llmSetting:
+                    $ref: '#/components/schemas/InstanceSetting_LLMSetting'
             description: An instance setting resource.
         InstanceSetting_GeneralSetting:
             type: object
@@ -2196,6 +2198,99 @@ components:
                     type: boolean
                     description: disallow_change_nickname disallows changing nickname.
             description: General instance settings configuration.
+        InstanceSetting_LLMAnthropicConfig:
+            type: object
+            properties:
+                apiKey:
+                    type: string
+                    description: API key for Anthropic (masked in responses if set).
+                baseUrl:
+                    type: string
+                    description: Base URL for API requests.
+                defaultModel:
+                    type: string
+                    description: Default model for chat completion (e.g., "claude-3-5-sonnet-20241022").
+            description: Anthropic-specific configuration.
+        InstanceSetting_LLMGeminiConfig:
+            type: object
+            properties:
+                apiKey:
+                    type: string
+                    description: API key for Google AI (masked in responses if set).
+                defaultModel:
+                    type: string
+                    description: Default model (e.g., "gemini-1.5-flash", "gemini-1.5-pro").
+            description: Google AI Gemini-specific configuration.
+        InstanceSetting_LLMOllamaConfig:
+            type: object
+            properties:
+                host:
+                    type: string
+                    description: Host address for Ollama server (e.g., "http://localhost:11434").
+                defaultModel:
+                    type: string
+                    description: Default model for chat completion (e.g., "llama3.2", "mistral").
+                embeddingModel:
+                    type: string
+                    description: Default model for embeddings (e.g., "nomic-embed-text").
+            description: Ollama-specific configuration.
+        InstanceSetting_LLMOpenAIConfig:
+            type: object
+            properties:
+                apiKey:
+                    type: string
+                    description: API key for OpenAI (masked in responses if set).
+                baseUrl:
+                    type: string
+                    description: Base URL for API requests (for Azure OpenAI or custom endpoints).
+                defaultModel:
+                    type: string
+                    description: Default model for chat completion (e.g., "gpt-4o-mini", "gpt-4").
+                embeddingModel:
+                    type: string
+                    description: Default model for embeddings (e.g., "text-embedding-3-small").
+            description: OpenAI-specific configuration.
+        InstanceSetting_LLMSetting:
+            type: object
+            properties:
+                provider:
+                    enum:
+                        - LLM_PROVIDER_UNSPECIFIED
+                        - OPENAI
+                        - ANTHROPIC
+                        - GEMINI
+                        - OLLAMA
+                    type: string
+                    description: The active LLM provider.
+                    format: enum
+                openaiConfig:
+                    allOf:
+                        - $ref: '#/components/schemas/InstanceSetting_LLMOpenAIConfig'
+                    description: OpenAI configuration.
+                anthropicConfig:
+                    allOf:
+                        - $ref: '#/components/schemas/InstanceSetting_LLMAnthropicConfig'
+                    description: Anthropic configuration.
+                geminiConfig:
+                    allOf:
+                        - $ref: '#/components/schemas/InstanceSetting_LLMGeminiConfig'
+                    description: Gemini configuration.
+                ollamaConfig:
+                    allOf:
+                        - $ref: '#/components/schemas/InstanceSetting_LLMOllamaConfig'
+                    description: Ollama configuration.
+                enableAutoTagging:
+                    type: boolean
+                    description: enable_auto_tagging enables automatic tag suggestions for new memos.
+                enableAutoSummary:
+                    type: boolean
+                    description: enable_auto_summary enables automatic summary generation.
+                enableSemanticSearch:
+                    type: boolean
+                    description: enable_semantic_search enables vector-based semantic search.
+            description: |-
+                LLM/AI provider configuration settings.
+                 API keys are masked in responses (shown as ***masked*** if set).
         InstanceSetting_MemoRelatedSetting:
             type: object
             properties:

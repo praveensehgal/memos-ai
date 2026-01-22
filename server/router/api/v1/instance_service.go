@@ -47,6 +47,8 @@ func (s *APIV1Service) GetInstanceSetting(ctx context.Context, request *v1pb.Get
 		_, err = s.Store.GetInstanceMemoRelatedSetting(ctx)
 	case storepb.InstanceSettingKey_STORAGE:
 		_, err = s.Store.GetInstanceStorageSetting(ctx)
+	case storepb.InstanceSettingKey_LLM:
+		_, err = s.Store.GetInstanceLLMSetting(ctx)
 	default:
 		return nil, status.Errorf(codes.InvalidArgument, "unsupported instance setting key: %v", instanceSettingKey)
 	}
@@ -64,8 +66,8 @@ func (s *APIV1Service) GetInstanceSetting(ctx context.Context, request *v1pb.Get
 		return nil, status.Errorf(codes.NotFound, "instance setting not found")
 	}
 
-	// For storage setting, only admin can get it.
-	if instanceSetting.Key == storepb.InstanceSettingKey_STORAGE {
+	// For storage and LLM settings, only admin can get them.
+	if instanceSetting.Key == storepb.InstanceSettingKey_STORAGE || instanceSetting.Key == storepb.InstanceSettingKey_LLM {
 		user, err := s.fetchCurrentUser(ctx)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
@@ -122,6 +124,10 @@ func convertInstanceSettingFromStore(setting *storepb.InstanceSetting) *v1pb.Ins
 		instanceSetting.Value = &v1pb.InstanceSetting_MemoRelatedSetting_{
 			MemoRelatedSetting: convertInstanceMemoRelatedSettingFromStore(setting.GetMemoRelatedSetting()),
 		}
+	case *storepb.InstanceSetting_LlmSetting:
+		instanceSetting.Value = &v1pb.InstanceSetting_LlmSetting{
+			LlmSetting: convertInstanceLLMSettingFromStore(setting.GetLlmSetting()),
+		}
 	}
 	return instanceSetting
 }
@@ -146,6 +152,10 @@ func convertInstanceSettingToStore(setting *v1pb.InstanceSetting) *storepb.Insta
 	case storepb.InstanceSettingKey_MEMO_RELATED:
 		instanceSetting.Value = &storepb.InstanceSetting_MemoRelatedSetting{
 			MemoRelatedSetting: convertInstanceMemoRelatedSettingToStore(setting.GetMemoRelatedSetting()),
+		}
+	case storepb.InstanceSettingKey_LLM:
+		instanceSetting.Value = &storepb.InstanceSetting_LlmSetting{
+			LlmSetting: convertInstanceLLMSettingToStore(setting.GetLlmSetting()),
 		}
 	default:
 		// Keep the default GeneralSetting value
@@ -268,6 +278,116 @@ func convertInstanceMemoRelatedSettingToStore(setting *v1pb.InstanceSetting_Memo
 		EnableDoubleClickEdit:    setting.EnableDoubleClickEdit,
 		Reactions:                setting.Reactions,
 	}
+}
+
+const maskedAPIKey = "***masked***"
+
+func convertInstanceLLMSettingFromStore(setting *storepb.InstanceLLMSetting) *v1pb.InstanceSetting_LLMSetting {
+	if setting == nil {
+		return nil
+	}
+
+	llmSetting := &v1pb.InstanceSetting_LLMSetting{
+		Provider:             v1pb.InstanceSetting_LLMSetting_LLMProvider(setting.Provider),
+		EnableAutoTagging:    setting.EnableAutoTagging,
+		EnableAutoSummary:    setting.EnableAutoSummary,
+		EnableSemanticSearch: setting.EnableSemanticSearch,
+	}
+
+	// Convert OpenAI config with masked API key
+	if setting.OpenaiConfig != nil {
+		llmSetting.OpenaiConfig = &v1pb.InstanceSetting_LLMOpenAIConfig{
+			BaseUrl:        setting.OpenaiConfig.BaseUrl,
+			DefaultModel:   setting.OpenaiConfig.DefaultModel,
+			EmbeddingModel: setting.OpenaiConfig.EmbeddingModel,
+		}
+		if setting.OpenaiConfig.ApiKey != "" {
+			llmSetting.OpenaiConfig.ApiKey = maskedAPIKey
+		}
+	}
+
+	// Convert Anthropic config with masked API key
+	if setting.AnthropicConfig != nil {
+		llmSetting.AnthropicConfig = &v1pb.InstanceSetting_LLMAnthropicConfig{
+			BaseUrl:      setting.AnthropicConfig.BaseUrl,
+			DefaultModel: setting.AnthropicConfig.DefaultModel,
+		}
+		if setting.AnthropicConfig.ApiKey != "" {
+			llmSetting.AnthropicConfig.ApiKey = maskedAPIKey
+		}
+	}
+
+	// Convert Gemini config with masked API key
+	if setting.GeminiConfig != nil {
+		llmSetting.GeminiConfig = &v1pb.InstanceSetting_LLMGeminiConfig{
+			DefaultModel: setting.GeminiConfig.DefaultModel,
+		}
+		if setting.GeminiConfig.ApiKey != "" {
+			llmSetting.GeminiConfig.ApiKey = maskedAPIKey
+		}
+	}
+
+	// Convert Ollama config (no API key)
+	if setting.OllamaConfig != nil {
+		llmSetting.OllamaConfig = &v1pb.InstanceSetting_LLMOllamaConfig{
+			Host:           setting.OllamaConfig.Host,
+			DefaultModel:   setting.OllamaConfig.DefaultModel,
+			EmbeddingModel: setting.OllamaConfig.EmbeddingModel,
+		}
+	}
+
+	return llmSetting
+}
+
+func convertInstanceLLMSettingToStore(setting *v1pb.InstanceSetting_LLMSetting) *storepb.InstanceLLMSetting {
+	if setting == nil {
+		return nil
+	}
+
+	llmSetting := &storepb.InstanceLLMSetting{
+		Provider:             storepb.InstanceLLMSetting_LLMProvider(setting.Provider),
+		EnableAutoTagging:    setting.EnableAutoTagging,
+		EnableAutoSummary:    setting.EnableAutoSummary,
+		EnableSemanticSearch: setting.EnableSemanticSearch,
+	}
+
+	// Convert OpenAI config
+	if setting.OpenaiConfig != nil {
+		llmSetting.OpenaiConfig = &storepb.LLMOpenAIConfig{
+			ApiKey:         setting.OpenaiConfig.ApiKey,
+			BaseUrl:        setting.OpenaiConfig.BaseUrl,
+			DefaultModel:   setting.OpenaiConfig.DefaultModel,
+			EmbeddingModel: setting.OpenaiConfig.EmbeddingModel,
+		}
+	}
+
+	// Convert Anthropic config
+	if setting.AnthropicConfig != nil {
+		llmSetting.AnthropicConfig = &storepb.LLMAnthropicConfig{
+			ApiKey:       setting.AnthropicConfig.ApiKey,
+			BaseUrl:      setting.AnthropicConfig.BaseUrl,
+			DefaultModel: setting.AnthropicConfig.DefaultModel,
+		}
+	}
+
+	// Convert Gemini config
+	if setting.GeminiConfig != nil {
+		llmSetting.GeminiConfig = &storepb.LLMGeminiConfig{
+			ApiKey:       setting.GeminiConfig.ApiKey,
+			DefaultModel: setting.GeminiConfig.DefaultModel,
+		}
+	}
+
+	// Convert Ollama config
+	if setting.OllamaConfig != nil {
+		llmSetting.OllamaConfig = &storepb.LLMOllamaConfig{
+			Host:           setting.OllamaConfig.Host,
+			DefaultModel:   setting.OllamaConfig.DefaultModel,
+			EmbeddingModel: setting.OllamaConfig.EmbeddingModel,
+		}
+	}
+
+	return llmSetting
 }
 
 var (

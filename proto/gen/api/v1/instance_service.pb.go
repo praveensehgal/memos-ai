@@ -34,6 +34,8 @@ const (
 	InstanceSetting_STORAGE InstanceSetting_Key = 2
 	// MEMO_RELATED is the key for memo related settings.
 	InstanceSetting_MEMO_RELATED InstanceSetting_Key = 3
+	// LLM is the key for LLM/AI settings.
+	InstanceSetting_LLM InstanceSetting_Key = 4
 )
 
 // Enum value maps for InstanceSetting_Key.
@@ -43,12 +45,14 @@ var (
 		1: "GENERAL",
 		2: "STORAGE",
 		3: "MEMO_RELATED",
+		4: "LLM",
 	}
 	InstanceSetting_Key_value = map[string]int32{
 		"KEY_UNSPECIFIED": 0,
 		"GENERAL":         1,
 		"STORAGE":         2,
 		"MEMO_RELATED":    3,
+		"LLM":             4,
 	}
 )
 
@@ -133,6 +137,66 @@ func (x InstanceSetting_StorageSetting_StorageType) Number() protoreflect.EnumNu
 // Deprecated: Use InstanceSetting_StorageSetting_StorageType.Descriptor instead.
 func (InstanceSetting_StorageSetting_StorageType) EnumDescriptor() ([]byte, []int) {
 	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 1, 0}
+}
+
+// LLM provider type enumeration.
+type InstanceSetting_LLMSetting_LLMProvider int32
+
+const (
+	InstanceSetting_LLMSetting_LLM_PROVIDER_UNSPECIFIED InstanceSetting_LLMSetting_LLMProvider = 0
+	// OpenAI (GPT-4, GPT-3.5)
+	InstanceSetting_LLMSetting_OPENAI InstanceSetting_LLMSetting_LLMProvider = 1
+	// Anthropic (Claude)
+	InstanceSetting_LLMSetting_ANTHROPIC InstanceSetting_LLMSetting_LLMProvider = 2
+	// Google AI (Gemini)
+	InstanceSetting_LLMSetting_GEMINI InstanceSetting_LLMSetting_LLMProvider = 3
+	// Local Ollama
+	InstanceSetting_LLMSetting_OLLAMA InstanceSetting_LLMSetting_LLMProvider = 4
+)
+
+// Enum value maps for InstanceSetting_LLMSetting_LLMProvider.
+var (
+	InstanceSetting_LLMSetting_LLMProvider_name = map[int32]string{
+		0: "LLM_PROVIDER_UNSPECIFIED",
+		1: "OPENAI",
+		2: "ANTHROPIC",
+		3: "GEMINI",
+		4: "OLLAMA",
+	}
+	InstanceSetting_LLMSetting_LLMProvider_value = map[string]int32{
+		"LLM_PROVIDER_UNSPECIFIED": 0,
+		"OPENAI":                   1,
+		"ANTHROPIC":                2,
+		"GEMINI":                   3,
+		"OLLAMA":                   4,
+	}
+)
+
+func (x InstanceSetting_LLMSetting_LLMProvider) Enum() *InstanceSetting_LLMSetting_LLMProvider {
+	p := new(InstanceSetting_LLMSetting_LLMProvider)
+	*p = x
+	return p
+}
+
+func (x InstanceSetting_LLMSetting_LLMProvider) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (InstanceSetting_LLMSetting_LLMProvider) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_v1_instance_service_proto_enumTypes[2].Descriptor()
+}
+
+func (InstanceSetting_LLMSetting_LLMProvider) Type() protoreflect.EnumType {
+	return &file_api_v1_instance_service_proto_enumTypes[2]
+}
+
+func (x InstanceSetting_LLMSetting_LLMProvider) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMSetting_LLMProvider.Descriptor instead.
+func (InstanceSetting_LLMSetting_LLMProvider) EnumDescriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 3, 0}
 }
 
 // Instance profile message containing basic instance information.
@@ -258,6 +322,7 @@ type InstanceSetting struct {
 	//	*InstanceSetting_GeneralSetting_
 	//	*InstanceSetting_StorageSetting_
 	//	*InstanceSetting_MemoRelatedSetting_
+	//	*InstanceSetting_LlmSetting
 	Value         isInstanceSetting_Value `protobuf_oneof:"value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -334,6 +399,15 @@ func (x *InstanceSetting) GetMemoRelatedSetting() *InstanceSetting_MemoRelatedSe
 	return nil
 }
 
+func (x *InstanceSetting) GetLlmSetting() *InstanceSetting_LLMSetting {
+	if x != nil {
+		if x, ok := x.Value.(*InstanceSetting_LlmSetting); ok {
+			return x.LlmSetting
+		}
+	}
+	return nil
+}
+
 type isInstanceSetting_Value interface {
 	isInstanceSetting_Value()
 }
@@ -350,11 +424,17 @@ type InstanceSetting_MemoRelatedSetting_ struct {
 	MemoRelatedSetting *InstanceSetting_MemoRelatedSetting `protobuf:"bytes,4,opt,name=memo_related_setting,json=memoRelatedSetting,proto3,oneof"`
 }
 
+type InstanceSetting_LlmSetting struct {
+	LlmSetting *InstanceSetting_LLMSetting `protobuf:"bytes,5,opt,name=llm_setting,json=llmSetting,proto3,oneof"`
+}
+
 func (*InstanceSetting_GeneralSetting_) isInstanceSetting_Value() {}
 
 func (*InstanceSetting_StorageSetting_) isInstanceSetting_Value() {}
 
 func (*InstanceSetting_MemoRelatedSetting_) isInstanceSetting_Value() {}
+
+func (*InstanceSetting_LlmSetting) isInstanceSetting_Value() {}
 
 // Request message for GetInstanceSetting method.
 type GetInstanceSettingRequest struct {
@@ -725,6 +805,372 @@ func (x *InstanceSetting_MemoRelatedSetting) GetReactions() []string {
 	return nil
 }
 
+// LLM/AI provider configuration settings.
+// API keys are masked in responses (shown as ***masked*** if set).
+type InstanceSetting_LLMSetting struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The active LLM provider.
+	Provider InstanceSetting_LLMSetting_LLMProvider `protobuf:"varint,1,opt,name=provider,proto3,enum=memos.api.v1.InstanceSetting_LLMSetting_LLMProvider" json:"provider,omitempty"`
+	// OpenAI configuration.
+	OpenaiConfig *InstanceSetting_LLMOpenAIConfig `protobuf:"bytes,2,opt,name=openai_config,json=openaiConfig,proto3" json:"openai_config,omitempty"`
+	// Anthropic configuration.
+	AnthropicConfig *InstanceSetting_LLMAnthropicConfig `protobuf:"bytes,3,opt,name=anthropic_config,json=anthropicConfig,proto3" json:"anthropic_config,omitempty"`
+	// Gemini configuration.
+	GeminiConfig *InstanceSetting_LLMGeminiConfig `protobuf:"bytes,4,opt,name=gemini_config,json=geminiConfig,proto3" json:"gemini_config,omitempty"`
+	// Ollama configuration.
+	OllamaConfig *InstanceSetting_LLMOllamaConfig `protobuf:"bytes,5,opt,name=ollama_config,json=ollamaConfig,proto3" json:"ollama_config,omitempty"`
+	// enable_auto_tagging enables automatic tag suggestions for new memos.
+	EnableAutoTagging bool `protobuf:"varint,10,opt,name=enable_auto_tagging,json=enableAutoTagging,proto3" json:"enable_auto_tagging,omitempty"`
+	// enable_auto_summary enables automatic summary generation.
+	EnableAutoSummary bool `protobuf:"varint,11,opt,name=enable_auto_summary,json=enableAutoSummary,proto3" json:"enable_auto_summary,omitempty"`
+	// enable_semantic_search enables vector-based semantic search.
+	EnableSemanticSearch bool `protobuf:"varint,12,opt,name=enable_semantic_search,json=enableSemanticSearch,proto3" json:"enable_semantic_search,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *InstanceSetting_LLMSetting) Reset() {
+	*x = InstanceSetting_LLMSetting{}
+	mi := &file_api_v1_instance_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceSetting_LLMSetting) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceSetting_LLMSetting) ProtoMessage() {}
+
+func (x *InstanceSetting_LLMSetting) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_instance_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMSetting.ProtoReflect.Descriptor instead.
+func (*InstanceSetting_LLMSetting) Descriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 3}
+}
+
+func (x *InstanceSetting_LLMSetting) GetProvider() InstanceSetting_LLMSetting_LLMProvider {
+	if x != nil {
+		return x.Provider
+	}
+	return InstanceSetting_LLMSetting_LLM_PROVIDER_UNSPECIFIED
+}
+
+func (x *InstanceSetting_LLMSetting) GetOpenaiConfig() *InstanceSetting_LLMOpenAIConfig {
+	if x != nil {
+		return x.OpenaiConfig
+	}
+	return nil
+}
+
+func (x *InstanceSetting_LLMSetting) GetAnthropicConfig() *InstanceSetting_LLMAnthropicConfig {
+	if x != nil {
+		return x.AnthropicConfig
+	}
+	return nil
+}
+
+func (x *InstanceSetting_LLMSetting) GetGeminiConfig() *InstanceSetting_LLMGeminiConfig {
+	if x != nil {
+		return x.GeminiConfig
+	}
+	return nil
+}
+
+func (x *InstanceSetting_LLMSetting) GetOllamaConfig() *InstanceSetting_LLMOllamaConfig {
+	if x != nil {
+		return x.OllamaConfig
+	}
+	return nil
+}
+
+func (x *InstanceSetting_LLMSetting) GetEnableAutoTagging() bool {
+	if x != nil {
+		return x.EnableAutoTagging
+	}
+	return false
+}
+
+func (x *InstanceSetting_LLMSetting) GetEnableAutoSummary() bool {
+	if x != nil {
+		return x.EnableAutoSummary
+	}
+	return false
+}
+
+func (x *InstanceSetting_LLMSetting) GetEnableSemanticSearch() bool {
+	if x != nil {
+		return x.EnableSemanticSearch
+	}
+	return false
+}
+
+// OpenAI-specific configuration.
+type InstanceSetting_LLMOpenAIConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// API key for OpenAI (masked in responses if set).
+	ApiKey string `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	// Base URL for API requests (for Azure OpenAI or custom endpoints).
+	BaseUrl string `protobuf:"bytes,2,opt,name=base_url,json=baseUrl,proto3" json:"base_url,omitempty"`
+	// Default model for chat completion (e.g., "gpt-4o-mini", "gpt-4").
+	DefaultModel string `protobuf:"bytes,3,opt,name=default_model,json=defaultModel,proto3" json:"default_model,omitempty"`
+	// Default model for embeddings (e.g., "text-embedding-3-small").
+	EmbeddingModel string `protobuf:"bytes,4,opt,name=embedding_model,json=embeddingModel,proto3" json:"embedding_model,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) Reset() {
+	*x = InstanceSetting_LLMOpenAIConfig{}
+	mi := &file_api_v1_instance_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceSetting_LLMOpenAIConfig) ProtoMessage() {}
+
+func (x *InstanceSetting_LLMOpenAIConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_instance_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMOpenAIConfig.ProtoReflect.Descriptor instead.
+func (*InstanceSetting_LLMOpenAIConfig) Descriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 4}
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) GetBaseUrl() string {
+	if x != nil {
+		return x.BaseUrl
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) GetDefaultModel() string {
+	if x != nil {
+		return x.DefaultModel
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMOpenAIConfig) GetEmbeddingModel() string {
+	if x != nil {
+		return x.EmbeddingModel
+	}
+	return ""
+}
+
+// Anthropic-specific configuration.
+type InstanceSetting_LLMAnthropicConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// API key for Anthropic (masked in responses if set).
+	ApiKey string `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	// Base URL for API requests.
+	BaseUrl string `protobuf:"bytes,2,opt,name=base_url,json=baseUrl,proto3" json:"base_url,omitempty"`
+	// Default model for chat completion (e.g., "claude-3-5-sonnet-20241022").
+	DefaultModel  string `protobuf:"bytes,3,opt,name=default_model,json=defaultModel,proto3" json:"default_model,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InstanceSetting_LLMAnthropicConfig) Reset() {
+	*x = InstanceSetting_LLMAnthropicConfig{}
+	mi := &file_api_v1_instance_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceSetting_LLMAnthropicConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceSetting_LLMAnthropicConfig) ProtoMessage() {}
+
+func (x *InstanceSetting_LLMAnthropicConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_instance_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMAnthropicConfig.ProtoReflect.Descriptor instead.
+func (*InstanceSetting_LLMAnthropicConfig) Descriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 5}
+}
+
+func (x *InstanceSetting_LLMAnthropicConfig) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMAnthropicConfig) GetBaseUrl() string {
+	if x != nil {
+		return x.BaseUrl
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMAnthropicConfig) GetDefaultModel() string {
+	if x != nil {
+		return x.DefaultModel
+	}
+	return ""
+}
+
+// Google AI Gemini-specific configuration.
+type InstanceSetting_LLMGeminiConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// API key for Google AI (masked in responses if set).
+	ApiKey string `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	// Default model (e.g., "gemini-1.5-flash", "gemini-1.5-pro").
+	DefaultModel  string `protobuf:"bytes,2,opt,name=default_model,json=defaultModel,proto3" json:"default_model,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InstanceSetting_LLMGeminiConfig) Reset() {
+	*x = InstanceSetting_LLMGeminiConfig{}
+	mi := &file_api_v1_instance_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceSetting_LLMGeminiConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceSetting_LLMGeminiConfig) ProtoMessage() {}
+
+func (x *InstanceSetting_LLMGeminiConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_instance_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMGeminiConfig.ProtoReflect.Descriptor instead.
+func (*InstanceSetting_LLMGeminiConfig) Descriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 6}
+}
+
+func (x *InstanceSetting_LLMGeminiConfig) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMGeminiConfig) GetDefaultModel() string {
+	if x != nil {
+		return x.DefaultModel
+	}
+	return ""
+}
+
+// Ollama-specific configuration.
+type InstanceSetting_LLMOllamaConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Host address for Ollama server (e.g., "http://localhost:11434").
+	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	// Default model for chat completion (e.g., "llama3.2", "mistral").
+	DefaultModel string `protobuf:"bytes,2,opt,name=default_model,json=defaultModel,proto3" json:"default_model,omitempty"`
+	// Default model for embeddings (e.g., "nomic-embed-text").
+	EmbeddingModel string `protobuf:"bytes,3,opt,name=embedding_model,json=embeddingModel,proto3" json:"embedding_model,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *InstanceSetting_LLMOllamaConfig) Reset() {
+	*x = InstanceSetting_LLMOllamaConfig{}
+	mi := &file_api_v1_instance_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceSetting_LLMOllamaConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceSetting_LLMOllamaConfig) ProtoMessage() {}
+
+func (x *InstanceSetting_LLMOllamaConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_instance_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceSetting_LLMOllamaConfig.ProtoReflect.Descriptor instead.
+func (*InstanceSetting_LLMOllamaConfig) Descriptor() ([]byte, []int) {
+	return file_api_v1_instance_service_proto_rawDescGZIP(), []int{2, 7}
+}
+
+func (x *InstanceSetting_LLMOllamaConfig) GetHost() string {
+	if x != nil {
+		return x.Host
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMOllamaConfig) GetDefaultModel() string {
+	if x != nil {
+		return x.DefaultModel
+	}
+	return ""
+}
+
+func (x *InstanceSetting_LLMOllamaConfig) GetEmbeddingModel() string {
+	if x != nil {
+		return x.EmbeddingModel
+	}
+	return ""
+}
+
 // Custom profile configuration for instance branding.
 type InstanceSetting_GeneralSetting_CustomProfile struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -737,7 +1183,7 @@ type InstanceSetting_GeneralSetting_CustomProfile struct {
 
 func (x *InstanceSetting_GeneralSetting_CustomProfile) Reset() {
 	*x = InstanceSetting_GeneralSetting_CustomProfile{}
-	mi := &file_api_v1_instance_service_proto_msgTypes[8]
+	mi := &file_api_v1_instance_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -749,7 +1195,7 @@ func (x *InstanceSetting_GeneralSetting_CustomProfile) String() string {
 func (*InstanceSetting_GeneralSetting_CustomProfile) ProtoMessage() {}
 
 func (x *InstanceSetting_GeneralSetting_CustomProfile) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_instance_service_proto_msgTypes[8]
+	mi := &file_api_v1_instance_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -802,7 +1248,7 @@ type InstanceSetting_StorageSetting_S3Config struct {
 
 func (x *InstanceSetting_StorageSetting_S3Config) Reset() {
 	*x = InstanceSetting_StorageSetting_S3Config{}
-	mi := &file_api_v1_instance_service_proto_msgTypes[9]
+	mi := &file_api_v1_instance_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -814,7 +1260,7 @@ func (x *InstanceSetting_StorageSetting_S3Config) String() string {
 func (*InstanceSetting_StorageSetting_S3Config) ProtoMessage() {}
 
 func (x *InstanceSetting_StorageSetting_S3Config) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_instance_service_proto_msgTypes[9]
+	mi := &file_api_v1_instance_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -882,12 +1328,14 @@ const file_api_v1_instance_service_proto_rawDesc = "" +
 	"\x04demo\x18\x03 \x01(\bR\x04demo\x12!\n" +
 	"\finstance_url\x18\x06 \x01(\tR\vinstanceUrl\x12 \n" +
 	"\vinitialized\x18\a \x01(\bR\vinitialized\"\x1b\n" +
-	"\x19GetInstanceProfileRequest\"\x99\x0f\n" +
+	"\x19GetInstanceProfileRequest\"\xea\x18\n" +
 	"\x0fInstanceSetting\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tB\x03\xe0A\bR\x04name\x12W\n" +
 	"\x0fgeneral_setting\x18\x02 \x01(\v2,.memos.api.v1.InstanceSetting.GeneralSettingH\x00R\x0egeneralSetting\x12W\n" +
 	"\x0fstorage_setting\x18\x03 \x01(\v2,.memos.api.v1.InstanceSetting.StorageSettingH\x00R\x0estorageSetting\x12d\n" +
-	"\x14memo_related_setting\x18\x04 \x01(\v20.memos.api.v1.InstanceSetting.MemoRelatedSettingH\x00R\x12memoRelatedSetting\x1a\xca\x04\n" +
+	"\x14memo_related_setting\x18\x04 \x01(\v20.memos.api.v1.InstanceSetting.MemoRelatedSettingH\x00R\x12memoRelatedSetting\x12K\n" +
+	"\vllm_setting\x18\x05 \x01(\v2(.memos.api.v1.InstanceSetting.LLMSettingH\x00R\n" +
+	"llmSetting\x1a\xca\x04\n" +
 	"\x0eGeneralSetting\x12<\n" +
 	"\x1adisallow_user_registration\x18\x02 \x01(\bR\x18disallowUserRegistration\x124\n" +
 	"\x16disallow_password_auth\x18\x03 \x01(\bR\x14disallowPasswordAuth\x12+\n" +
@@ -923,12 +1371,49 @@ const file_api_v1_instance_service_proto_rawDesc = "" +
 	"\x18display_with_update_time\x18\x02 \x01(\bR\x15displayWithUpdateTime\x120\n" +
 	"\x14content_length_limit\x18\x03 \x01(\x05R\x12contentLengthLimit\x127\n" +
 	"\x18enable_double_click_edit\x18\x04 \x01(\bR\x15enableDoubleClickEdit\x12\x1c\n" +
-	"\treactions\x18\a \x03(\tR\treactions\"F\n" +
+	"\treactions\x18\a \x03(\tR\treactions\x1a\xad\x05\n" +
+	"\n" +
+	"LLMSetting\x12P\n" +
+	"\bprovider\x18\x01 \x01(\x0e24.memos.api.v1.InstanceSetting.LLMSetting.LLMProviderR\bprovider\x12R\n" +
+	"\ropenai_config\x18\x02 \x01(\v2-.memos.api.v1.InstanceSetting.LLMOpenAIConfigR\fopenaiConfig\x12[\n" +
+	"\x10anthropic_config\x18\x03 \x01(\v20.memos.api.v1.InstanceSetting.LLMAnthropicConfigR\x0fanthropicConfig\x12R\n" +
+	"\rgemini_config\x18\x04 \x01(\v2-.memos.api.v1.InstanceSetting.LLMGeminiConfigR\fgeminiConfig\x12R\n" +
+	"\rollama_config\x18\x05 \x01(\v2-.memos.api.v1.InstanceSetting.LLMOllamaConfigR\follamaConfig\x12.\n" +
+	"\x13enable_auto_tagging\x18\n" +
+	" \x01(\bR\x11enableAutoTagging\x12.\n" +
+	"\x13enable_auto_summary\x18\v \x01(\bR\x11enableAutoSummary\x124\n" +
+	"\x16enable_semantic_search\x18\f \x01(\bR\x14enableSemanticSearch\"^\n" +
+	"\vLLMProvider\x12\x1c\n" +
+	"\x18LLM_PROVIDER_UNSPECIFIED\x10\x00\x12\n" +
+	"\n" +
+	"\x06OPENAI\x10\x01\x12\r\n" +
+	"\tANTHROPIC\x10\x02\x12\n" +
+	"\n" +
+	"\x06GEMINI\x10\x03\x12\n" +
+	"\n" +
+	"\x06OLLAMA\x10\x04\x1a\x93\x01\n" +
+	"\x0fLLMOpenAIConfig\x12\x17\n" +
+	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12\x19\n" +
+	"\bbase_url\x18\x02 \x01(\tR\abaseUrl\x12#\n" +
+	"\rdefault_model\x18\x03 \x01(\tR\fdefaultModel\x12'\n" +
+	"\x0fembedding_model\x18\x04 \x01(\tR\x0eembeddingModel\x1am\n" +
+	"\x12LLMAnthropicConfig\x12\x17\n" +
+	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12\x19\n" +
+	"\bbase_url\x18\x02 \x01(\tR\abaseUrl\x12#\n" +
+	"\rdefault_model\x18\x03 \x01(\tR\fdefaultModel\x1aO\n" +
+	"\x0fLLMGeminiConfig\x12\x17\n" +
+	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12#\n" +
+	"\rdefault_model\x18\x02 \x01(\tR\fdefaultModel\x1as\n" +
+	"\x0fLLMOllamaConfig\x12\x12\n" +
+	"\x04host\x18\x01 \x01(\tR\x04host\x12#\n" +
+	"\rdefault_model\x18\x02 \x01(\tR\fdefaultModel\x12'\n" +
+	"\x0fembedding_model\x18\x03 \x01(\tR\x0eembeddingModel\"O\n" +
 	"\x03Key\x12\x13\n" +
 	"\x0fKEY_UNSPECIFIED\x10\x00\x12\v\n" +
 	"\aGENERAL\x10\x01\x12\v\n" +
 	"\aSTORAGE\x10\x02\x12\x10\n" +
-	"\fMEMO_RELATED\x10\x03:a\xeaA^\n" +
+	"\fMEMO_RELATED\x10\x03\x12\a\n" +
+	"\x03LLM\x10\x04:a\xeaA^\n" +
 	"\x1cmemos.api.v1/InstanceSetting\x12\x1binstance/settings/{setting}*\x10instanceSettings2\x0finstanceSettingB\a\n" +
 	"\x05value\"U\n" +
 	"\x19GetInstanceSettingRequest\x128\n" +
@@ -956,43 +1441,55 @@ func file_api_v1_instance_service_proto_rawDescGZIP() []byte {
 	return file_api_v1_instance_service_proto_rawDescData
 }
 
-var file_api_v1_instance_service_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_api_v1_instance_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_api_v1_instance_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_api_v1_instance_service_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_api_v1_instance_service_proto_goTypes = []any{
 	(InstanceSetting_Key)(0),                             // 0: memos.api.v1.InstanceSetting.Key
 	(InstanceSetting_StorageSetting_StorageType)(0),      // 1: memos.api.v1.InstanceSetting.StorageSetting.StorageType
-	(*InstanceProfile)(nil),                              // 2: memos.api.v1.InstanceProfile
-	(*GetInstanceProfileRequest)(nil),                    // 3: memos.api.v1.GetInstanceProfileRequest
-	(*InstanceSetting)(nil),                              // 4: memos.api.v1.InstanceSetting
-	(*GetInstanceSettingRequest)(nil),                    // 5: memos.api.v1.GetInstanceSettingRequest
-	(*UpdateInstanceSettingRequest)(nil),                 // 6: memos.api.v1.UpdateInstanceSettingRequest
-	(*InstanceSetting_GeneralSetting)(nil),               // 7: memos.api.v1.InstanceSetting.GeneralSetting
-	(*InstanceSetting_StorageSetting)(nil),               // 8: memos.api.v1.InstanceSetting.StorageSetting
-	(*InstanceSetting_MemoRelatedSetting)(nil),           // 9: memos.api.v1.InstanceSetting.MemoRelatedSetting
-	(*InstanceSetting_GeneralSetting_CustomProfile)(nil), // 10: memos.api.v1.InstanceSetting.GeneralSetting.CustomProfile
-	(*InstanceSetting_StorageSetting_S3Config)(nil),      // 11: memos.api.v1.InstanceSetting.StorageSetting.S3Config
-	(*fieldmaskpb.FieldMask)(nil),                        // 12: google.protobuf.FieldMask
+	(InstanceSetting_LLMSetting_LLMProvider)(0),          // 2: memos.api.v1.InstanceSetting.LLMSetting.LLMProvider
+	(*InstanceProfile)(nil),                              // 3: memos.api.v1.InstanceProfile
+	(*GetInstanceProfileRequest)(nil),                    // 4: memos.api.v1.GetInstanceProfileRequest
+	(*InstanceSetting)(nil),                              // 5: memos.api.v1.InstanceSetting
+	(*GetInstanceSettingRequest)(nil),                    // 6: memos.api.v1.GetInstanceSettingRequest
+	(*UpdateInstanceSettingRequest)(nil),                 // 7: memos.api.v1.UpdateInstanceSettingRequest
+	(*InstanceSetting_GeneralSetting)(nil),               // 8: memos.api.v1.InstanceSetting.GeneralSetting
+	(*InstanceSetting_StorageSetting)(nil),               // 9: memos.api.v1.InstanceSetting.StorageSetting
+	(*InstanceSetting_MemoRelatedSetting)(nil),           // 10: memos.api.v1.InstanceSetting.MemoRelatedSetting
+	(*InstanceSetting_LLMSetting)(nil),                   // 11: memos.api.v1.InstanceSetting.LLMSetting
+	(*InstanceSetting_LLMOpenAIConfig)(nil),              // 12: memos.api.v1.InstanceSetting.LLMOpenAIConfig
+	(*InstanceSetting_LLMAnthropicConfig)(nil),           // 13: memos.api.v1.InstanceSetting.LLMAnthropicConfig
+	(*InstanceSetting_LLMGeminiConfig)(nil),              // 14: memos.api.v1.InstanceSetting.LLMGeminiConfig
+	(*InstanceSetting_LLMOllamaConfig)(nil),              // 15: memos.api.v1.InstanceSetting.LLMOllamaConfig
+	(*InstanceSetting_GeneralSetting_CustomProfile)(nil), // 16: memos.api.v1.InstanceSetting.GeneralSetting.CustomProfile
+	(*InstanceSetting_StorageSetting_S3Config)(nil),      // 17: memos.api.v1.InstanceSetting.StorageSetting.S3Config
+	(*fieldmaskpb.FieldMask)(nil),                        // 18: google.protobuf.FieldMask
 }
 var file_api_v1_instance_service_proto_depIdxs = []int32{
-	7,  // 0: memos.api.v1.InstanceSetting.general_setting:type_name -> memos.api.v1.InstanceSetting.GeneralSetting
-	8,  // 1: memos.api.v1.InstanceSetting.storage_setting:type_name -> memos.api.v1.InstanceSetting.StorageSetting
-	9,  // 2: memos.api.v1.InstanceSetting.memo_related_setting:type_name -> memos.api.v1.InstanceSetting.MemoRelatedSetting
-	4,  // 3: memos.api.v1.UpdateInstanceSettingRequest.setting:type_name -> memos.api.v1.InstanceSetting
-	12, // 4: memos.api.v1.UpdateInstanceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
-	10, // 5: memos.api.v1.InstanceSetting.GeneralSetting.custom_profile:type_name -> memos.api.v1.InstanceSetting.GeneralSetting.CustomProfile
-	1,  // 6: memos.api.v1.InstanceSetting.StorageSetting.storage_type:type_name -> memos.api.v1.InstanceSetting.StorageSetting.StorageType
-	11, // 7: memos.api.v1.InstanceSetting.StorageSetting.s3_config:type_name -> memos.api.v1.InstanceSetting.StorageSetting.S3Config
-	3,  // 8: memos.api.v1.InstanceService.GetInstanceProfile:input_type -> memos.api.v1.GetInstanceProfileRequest
-	5,  // 9: memos.api.v1.InstanceService.GetInstanceSetting:input_type -> memos.api.v1.GetInstanceSettingRequest
-	6,  // 10: memos.api.v1.InstanceService.UpdateInstanceSetting:input_type -> memos.api.v1.UpdateInstanceSettingRequest
-	2,  // 11: memos.api.v1.InstanceService.GetInstanceProfile:output_type -> memos.api.v1.InstanceProfile
-	4,  // 12: memos.api.v1.InstanceService.GetInstanceSetting:output_type -> memos.api.v1.InstanceSetting
-	4,  // 13: memos.api.v1.InstanceService.UpdateInstanceSetting:output_type -> memos.api.v1.InstanceSetting
-	11, // [11:14] is the sub-list for method output_type
-	8,  // [8:11] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	8,  // 0: memos.api.v1.InstanceSetting.general_setting:type_name -> memos.api.v1.InstanceSetting.GeneralSetting
+	9,  // 1: memos.api.v1.InstanceSetting.storage_setting:type_name -> memos.api.v1.InstanceSetting.StorageSetting
+	10, // 2: memos.api.v1.InstanceSetting.memo_related_setting:type_name -> memos.api.v1.InstanceSetting.MemoRelatedSetting
+	11, // 3: memos.api.v1.InstanceSetting.llm_setting:type_name -> memos.api.v1.InstanceSetting.LLMSetting
+	5,  // 4: memos.api.v1.UpdateInstanceSettingRequest.setting:type_name -> memos.api.v1.InstanceSetting
+	18, // 5: memos.api.v1.UpdateInstanceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
+	16, // 6: memos.api.v1.InstanceSetting.GeneralSetting.custom_profile:type_name -> memos.api.v1.InstanceSetting.GeneralSetting.CustomProfile
+	1,  // 7: memos.api.v1.InstanceSetting.StorageSetting.storage_type:type_name -> memos.api.v1.InstanceSetting.StorageSetting.StorageType
+	17, // 8: memos.api.v1.InstanceSetting.StorageSetting.s3_config:type_name -> memos.api.v1.InstanceSetting.StorageSetting.S3Config
+	2,  // 9: memos.api.v1.InstanceSetting.LLMSetting.provider:type_name -> memos.api.v1.InstanceSetting.LLMSetting.LLMProvider
+	12, // 10: memos.api.v1.InstanceSetting.LLMSetting.openai_config:type_name -> memos.api.v1.InstanceSetting.LLMOpenAIConfig
+	13, // 11: memos.api.v1.InstanceSetting.LLMSetting.anthropic_config:type_name -> memos.api.v1.InstanceSetting.LLMAnthropicConfig
+	14, // 12: memos.api.v1.InstanceSetting.LLMSetting.gemini_config:type_name -> memos.api.v1.InstanceSetting.LLMGeminiConfig
+	15, // 13: memos.api.v1.InstanceSetting.LLMSetting.ollama_config:type_name -> memos.api.v1.InstanceSetting.LLMOllamaConfig
+	4,  // 14: memos.api.v1.InstanceService.GetInstanceProfile:input_type -> memos.api.v1.GetInstanceProfileRequest
+	6,  // 15: memos.api.v1.InstanceService.GetInstanceSetting:input_type -> memos.api.v1.GetInstanceSettingRequest
+	7,  // 16: memos.api.v1.InstanceService.UpdateInstanceSetting:input_type -> memos.api.v1.UpdateInstanceSettingRequest
+	3,  // 17: memos.api.v1.InstanceService.GetInstanceProfile:output_type -> memos.api.v1.InstanceProfile
+	5,  // 18: memos.api.v1.InstanceService.GetInstanceSetting:output_type -> memos.api.v1.InstanceSetting
+	5,  // 19: memos.api.v1.InstanceService.UpdateInstanceSetting:output_type -> memos.api.v1.InstanceSetting
+	17, // [17:20] is the sub-list for method output_type
+	14, // [14:17] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_instance_service_proto_init() }
@@ -1004,14 +1501,15 @@ func file_api_v1_instance_service_proto_init() {
 		(*InstanceSetting_GeneralSetting_)(nil),
 		(*InstanceSetting_StorageSetting_)(nil),
 		(*InstanceSetting_MemoRelatedSetting_)(nil),
+		(*InstanceSetting_LlmSetting)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_instance_service_proto_rawDesc), len(file_api_v1_instance_service_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   10,
+			NumEnums:      3,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

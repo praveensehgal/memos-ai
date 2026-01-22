@@ -254,6 +254,32 @@
     "go-to-home": "Go to Home"
   },
   "setting": {
+    "ai": "AI",
+    "ai-settings": {
+      "title": "AI Configuration",
+      "provider": "LLM Provider",
+      "provider-description": "Select the AI provider for intelligent features",
+      "openai-config": "OpenAI Configuration",
+      "anthropic-config": "Anthropic Configuration",
+      "gemini-config": "Google Gemini Configuration",
+      "ollama-config": "Ollama Configuration",
+      "api-key": "API Key",
+      "api-key-tooltip": "Your API key is encrypted and stored securely. Leave empty to keep existing key.",
+      "base-url": "Base URL",
+      "base-url-description": "Optional custom endpoint (for Azure OpenAI or proxy)",
+      "model": "Model",
+      "embedding-model": "Embedding Model",
+      "embedding-model-description": "Model used for semantic search embeddings",
+      "host": "Host",
+      "host-description": "Ollama server address (e.g., http://localhost:11434)",
+      "features": "AI Features",
+      "auto-tagging": "Auto-Tagging",
+      "auto-tagging-description": "Automatically suggest tags for new memos",
+      "auto-summary": "Auto-Summary",
+      "auto-summary-description": "Generate automatic summaries for memos",
+      "semantic-search": "Semantic Search",
+      "semantic-search-description": "Enable vector-based semantic search"
+    },
     "access-token-section": {
       "access-token-copied-to-clipboard": "Access token copied to clipboard",
       "access-token-deletion": "Are you sure you want to delete access token `{{description}}`?",

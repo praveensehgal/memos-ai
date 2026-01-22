@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file api/v1/instance_service.proto.
  */
 export const file_api_v1_instance_service: GenFile = /*@__PURE__*/
-  fileDesc("Ch1hcGkvdjEvaW5zdGFuY2Vfc2VydmljZS5wcm90bxIMbWVtb3MuYXBpLnYxIlsKD0luc3RhbmNlUHJvZmlsZRIPCgd2ZXJzaW9uGAIgASgJEgwKBGRlbW8YAyABKAgSFAoMaW5zdGFuY2VfdXJsGAYgASgJEhMKC2luaXRpYWxpemVkGAcgASgIIhsKGUdldEluc3RhbmNlUHJvZmlsZVJlcXVlc3QiswsKD0luc3RhbmNlU2V0dGluZxIRCgRuYW1lGAEgASgJQgPgQQgSRwoPZ2VuZXJhbF9zZXR0aW5nGAIgASgLMiwubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZy5HZW5lcmFsU2V0dGluZ0gAEkcKD3N0b3JhZ2Vfc2V0dGluZxgDIAEoCzIsLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuU3RvcmFnZVNldHRpbmdIABJQChRtZW1vX3JlbGF0ZWRfc2V0dGluZxgEIAEoCzIwLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuTWVtb1JlbGF0ZWRTZXR0aW5nSAAahwMKDkdlbmVyYWxTZXR0aW5nEiIKGmRpc2FsbG93X3VzZXJfcmVnaXN0cmF0aW9uGAIgASgIEh4KFmRpc2FsbG93X3Bhc3N3b3JkX2F1dGgYAyABKAgSGQoRYWRkaXRpb25hbF9zY3JpcHQYBCABKAkSGAoQYWRkaXRpb25hbF9zdHlsZRgFIAEoCRJSCg5jdXN0b21fcHJvZmlsZRgGIAEoCzI6Lm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuR2VuZXJhbFNldHRpbmcuQ3VzdG9tUHJvZmlsZRIdChV3ZWVrX3N0YXJ0X2RheV9vZmZzZXQYByABKAUSIAoYZGlzYWxsb3dfY2hhbmdlX3VzZXJuYW1lGAggASgIEiAKGGRpc2FsbG93X2NoYW5nZV9uaWNrbmFtZRgJIAEoCBpFCg1DdXN0b21Qcm9maWxlEg0KBXRpdGxlGAEgASgJEhMKC2Rlc2NyaXB0aW9uGAIgASgJEhAKCGxvZ29fdXJsGAMgASgJGroDCg5TdG9yYWdlU2V0dGluZxJOCgxzdG9yYWdlX3R5cGUYASABKA4yOC5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nLlN0b3JhZ2VTZXR0aW5nLlN0b3JhZ2VUeXBlEhkKEWZpbGVwYXRoX3RlbXBsYXRlGAIgASgJEhwKFHVwbG9hZF9zaXplX2xpbWl0X21iGAMgASgDEkgKCXMzX2NvbmZpZxgEIAEoCzI1Lm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuU3RvcmFnZVNldHRpbmcuUzNDb25maWcahgEKCFMzQ29uZmlnEhUKDWFjY2Vzc19rZXlfaWQYASABKAkSGQoRYWNjZXNzX2tleV9zZWNyZXQYAiABKAkSEAoIZW5kcG9pbnQYAyABKAkSDgoGcmVnaW9uGAQgASgJEg4KBmJ1Y2tldBgFIAEoCRIWCg51c2VfcGF0aF9zdHlsZRgGIAEoCCJMCgtTdG9yYWdlVHlwZRIcChhTVE9SQUdFX1RZUEVfVU5TUEVDSUZJRUQQABIMCghEQVRBQkFTRRABEgkKBUxPQ0FMEAISBgoCUzMQAxqtAQoSTWVtb1JlbGF0ZWRTZXR0aW5nEiIKGmRpc2FsbG93X3B1YmxpY192aXNpYmlsaXR5GAEgASgIEiAKGGRpc3BsYXlfd2l0aF91cGRhdGVfdGltZRgCIAEoCBIcChRjb250ZW50X2xlbmd0aF9saW1pdBgDIAEoBRIgChhlbmFibGVfZG91YmxlX2NsaWNrX2VkaXQYBCABKAgSEQoJcmVhY3Rpb25zGAcgAygJIkYKA0tleRITCg9LRVlfVU5TUEVDSUZJRUQQABILCgdHRU5FUkFMEAESCwoHU1RPUkFHRRACEhAKDE1FTU9fUkVMQVRFRBADOmHqQV4KHG1lbW9zLmFwaS52MS9JbnN0YW5jZVNldHRpbmcSG2luc3RhbmNlL3NldHRpbmdzL3tzZXR0aW5nfSoQaW5zdGFuY2VTZXR0aW5nczIPaW5zdGFuY2VTZXR0aW5nQgcKBXZhbHVlIk8KGUdldEluc3RhbmNlU2V0dGluZ1JlcXVlc3QSMgoEbmFtZRgBIAEoCUIk4EEC+kEeChxtZW1vcy5hcGkudjEvSW5zdGFuY2VTZXR0aW5nIokBChxVcGRhdGVJbnN0YW5jZVNldHRpbmdSZXF1ZXN0EjMKB3NldHRpbmcYASABKAsyHS5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nQgPgQQISNAoLdXBkYXRlX21hc2sYAiABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrQgPgQQEy2wMKD0luc3RhbmNlU2VydmljZRJ+ChJHZXRJbnN0YW5jZVByb2ZpbGUSJy5tZW1vcy5hcGkudjEuR2V0SW5zdGFuY2VQcm9maWxlUmVxdWVzdBodLm1lbW9zLmFwaS52MS5JbnN0YW5jZVByb2ZpbGUiIILT5JMCGhIYL2FwaS92MS9pbnN0YW5jZS9wcm9maWxlEo8BChJHZXRJbnN0YW5jZVNldHRpbmcSJy5tZW1vcy5hcGkudjEuR2V0SW5zdGFuY2VTZXR0aW5nUmVxdWVzdBodLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmciMdpBBG5hbWWC0+STAiQSIi9hcGkvdjEve25hbWU9aW5zdGFuY2Uvc2V0dGluZ3MvKn0StQEKFVVwZGF0ZUluc3RhbmNlU2V0dGluZxIqLm1lbW9zLmFwaS52MS5VcGRhdGVJbnN0YW5jZVNldHRpbmdSZXF1ZXN0Gh0ubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZyJR2kETc2V0dGluZyx1cGRhdGVfbWFza4LT5JMCNToHc2V0dGluZzIqL2FwaS92MS97c2V0dGluZy5uYW1lPWluc3RhbmNlL3NldHRpbmdzLyp9QqwBChBjb20ubWVtb3MuYXBpLnYxQhRJbnN0YW5jZVNlcnZpY2VQcm90b1ABWjBnaXRodWIuY29tL3VzZW1lbW9zL21lbW9zL3Byb3RvL2dlbi9hcGkvdjE7YXBpdjGiAgNNQViqAgxNZW1vcy5BcGkuVjHKAgxNZW1vc1xBcGlcVjHiAhhNZW1vc1xBcGlcVjFcR1BCTWV0YWRhdGHqAg5NZW1vczo6QXBpOjpWMWIGcHJvdG8z", [file_google_api_annotations, file_google_api_client, file_google_api_field_behavior, file_google_api_resource, file_google_protobuf_field_mask]);
+  fileDesc("Ch1hcGkvdjEvaW5zdGFuY2Vfc2VydmljZS5wcm90bxIMbWVtb3MuYXBpLnYxIlsKD0luc3RhbmNlUHJvZmlsZRIPCgd2ZXJzaW9uGAIgASgJEgwKBGRlbW8YAyABKAgSFAoMaW5zdGFuY2VfdXJsGAYgASgJEhMKC2luaXRpYWxpemVkGAcgASgIIhsKGUdldEluc3RhbmNlUHJvZmlsZVJlcXVlc3Qi7hIKD0luc3RhbmNlU2V0dGluZxIRCgRuYW1lGAEgASgJQgPgQQgSRwoPZ2VuZXJhbF9zZXR0aW5nGAIgASgLMiwubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZy5HZW5lcmFsU2V0dGluZ0gAEkcKD3N0b3JhZ2Vfc2V0dGluZxgDIAEoCzIsLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuU3RvcmFnZVNldHRpbmdIABJQChRtZW1vX3JlbGF0ZWRfc2V0dGluZxgEIAEoCzIwLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuTWVtb1JlbGF0ZWRTZXR0aW5nSAASPwoLbGxtX3NldHRpbmcYBSABKAsyKC5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nLkxMTVNldHRpbmdIABqHAwoOR2VuZXJhbFNldHRpbmcSIgoaZGlzYWxsb3dfdXNlcl9yZWdpc3RyYXRpb24YAiABKAgSHgoWZGlzYWxsb3dfcGFzc3dvcmRfYXV0aBgDIAEoCBIZChFhZGRpdGlvbmFsX3NjcmlwdBgEIAEoCRIYChBhZGRpdGlvbmFsX3N0eWxlGAUgASgJElIKDmN1c3RvbV9wcm9maWxlGAYgASgLMjoubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZy5HZW5lcmFsU2V0dGluZy5DdXN0b21Qcm9maWxlEh0KFXdlZWtfc3RhcnRfZGF5X29mZnNldBgHIAEoBRIgChhkaXNhbGxvd19jaGFuZ2VfdXNlcm5hbWUYCCABKAgSIAoYZGlzYWxsb3dfY2hhbmdlX25pY2tuYW1lGAkgASgIGkUKDUN1c3RvbVByb2ZpbGUSDQoFdGl0bGUYASABKAkSEwoLZGVzY3JpcHRpb24YAiABKAkSEAoIbG9nb191cmwYAyABKAkaugMKDlN0b3JhZ2VTZXR0aW5nEk4KDHN0b3JhZ2VfdHlwZRgBIAEoDjI4Lm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuU3RvcmFnZVNldHRpbmcuU3RvcmFnZVR5cGUSGQoRZmlsZXBhdGhfdGVtcGxhdGUYAiABKAkSHAoUdXBsb2FkX3NpemVfbGltaXRfbWIYAyABKAMSSAoJczNfY29uZmlnGAQgASgLMjUubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZy5TdG9yYWdlU2V0dGluZy5TM0NvbmZpZxqGAQoIUzNDb25maWcSFQoNYWNjZXNzX2tleV9pZBgBIAEoCRIZChFhY2Nlc3Nfa2V5X3NlY3JldBgCIAEoCRIQCghlbmRwb2ludBgDIAEoCRIOCgZyZWdpb24YBCABKAkSDgoGYnVja2V0GAUgASgJEhYKDnVzZV9wYXRoX3N0eWxlGAYgASgIIkwKC1N0b3JhZ2VUeXBlEhwKGFNUT1JBR0VfVFlQRV9VTlNQRUNJRklFRBAAEgwKCERBVEFCQVNFEAESCQoFTE9DQUwQAhIGCgJTMxADGq0BChJNZW1vUmVsYXRlZFNldHRpbmcSIgoaZGlzYWxsb3dfcHVibGljX3Zpc2liaWxpdHkYASABKAgSIAoYZGlzcGxheV93aXRoX3VwZGF0ZV90aW1lGAIgASgIEhwKFGNvbnRlbnRfbGVuZ3RoX2xpbWl0GAMgASgFEiAKGGVuYWJsZV9kb3VibGVfY2xpY2tfZWRpdBgEIAEoCBIRCglyZWFjdGlvbnMYByADKAkarAQKCkxMTVNldHRpbmcSRgoIcHJvdmlkZXIYASABKA4yNC5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nLkxMTVNldHRpbmcuTExNUHJvdmlkZXISRAoNb3BlbmFpX2NvbmZpZxgCIAEoCzItLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuTExNT3BlbkFJQ29uZmlnEkoKEGFudGhyb3BpY19jb25maWcYAyABKAsyMC5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nLkxMTUFudGhyb3BpY0NvbmZpZxJECg1nZW1pbmlfY29uZmlnGAQgASgLMi0ubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZy5MTE1HZW1pbmlDb25maWcSRAoNb2xsYW1hX2NvbmZpZxgFIAEoCzItLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmcuTExNT2xsYW1hQ29uZmlnEhsKE2VuYWJsZV9hdXRvX3RhZ2dpbmcYCiABKAgSGwoTZW5hYmxlX2F1dG9fc3VtbWFyeRgLIAEoCBIeChZlbmFibGVfc2VtYW50aWNfc2VhcmNoGAwgASgIIl4KC0xMTVByb3ZpZGVyEhwKGExMTV9QUk9WSURFUl9VTlNQRUNJRklFRBAAEgoKBk9QRU5BSRABEg0KCUFOVEhST1BJQxACEgoKBkdFTUlOSRADEgoKBk9MTEFNQRAEGmQKD0xMTU9wZW5BSUNvbmZpZxIPCgdhcGlfa2V5GAEgASgJEhAKCGJhc2VfdXJsGAIgASgJEhUKDWRlZmF1bHRfbW9kZWwYAyABKAkSFwoPZW1iZWRkaW5nX21vZGVsGAQgASgJGk4KEkxMTUFudGhyb3BpY0NvbmZpZxIPCgdhcGlfa2V5GAEgASgJEhAKCGJhc2VfdXJsGAIgASgJEhUKDWRlZmF1bHRfbW9kZWwYAyABKAkaOQoPTExNR2VtaW5pQ29uZmlnEg8KB2FwaV9rZXkYASABKAkSFQoNZGVmYXVsdF9tb2RlbBgCIAEoCRpPCg9MTE1PbGxhbWFDb25maWcSDAoEaG9zdBgBIAEoCRIVCg1kZWZhdWx0X21vZGVsGAIgASgJEhcKD2VtYmVkZGluZ19tb2RlbBgDIAEoCSJPCgNLZXkSEwoPS0VZX1VOU1BFQ0lGSUVEEAASCwoHR0VORVJBTBABEgsKB1NUT1JBR0UQAhIQCgxNRU1PX1JFTEFURUQQAxIHCgNMTE0QBDph6kFeChxtZW1vcy5hcGkudjEvSW5zdGFuY2VTZXR0aW5nEhtpbnN0YW5jZS9zZXR0aW5ncy97c2V0dGluZ30qEGluc3RhbmNlU2V0dGluZ3MyD2luc3RhbmNlU2V0dGluZ0IHCgV2YWx1ZSJPChlHZXRJbnN0YW5jZVNldHRpbmdSZXF1ZXN0EjIKBG5hbWUYASABKAlCJOBBAvpBHgocbWVtb3MuYXBpLnYxL0luc3RhbmNlU2V0dGluZyKJAQocVXBkYXRlSW5zdGFuY2VTZXR0aW5nUmVxdWVzdBIzCgdzZXR0aW5nGAEgASgLMh0ubWVtb3MuYXBpLnYxLkluc3RhbmNlU2V0dGluZ0ID4EECEjQKC3VwZGF0ZV9tYXNrGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLkZpZWxkTWFza0ID4EEBMtsDCg9JbnN0YW5jZVNlcnZpY2USfgoSR2V0SW5zdGFuY2VQcm9maWxlEicubWVtb3MuYXBpLnYxLkdldEluc3RhbmNlUHJvZmlsZVJlcXVlc3QaHS5tZW1vcy5hcGkudjEuSW5zdGFuY2VQcm9maWxlIiCC0+STAhoSGC9hcGkvdjEvaW5zdGFuY2UvcHJvZmlsZRKPAQoSR2V0SW5zdGFuY2VTZXR0aW5nEicubWVtb3MuYXBpLnYxLkdldEluc3RhbmNlU2V0dGluZ1JlcXVlc3QaHS5tZW1vcy5hcGkudjEuSW5zdGFuY2VTZXR0aW5nIjHaQQRuYW1lgtPkkwIkEiIvYXBpL3YxL3tuYW1lPWluc3RhbmNlL3NldHRpbmdzLyp9ErUBChVVcGRhdGVJbnN0YW5jZVNldHRpbmcSKi5tZW1vcy5hcGkudjEuVXBkYXRlSW5zdGFuY2VTZXR0aW5nUmVxdWVzdBodLm1lbW9zLmFwaS52MS5JbnN0YW5jZVNldHRpbmciUdpBE3NldHRpbmcsdXBkYXRlX21hc2uC0+STAjU6B3NldHRpbmcyKi9hcGkvdjEve3NldHRpbmcubmFtZT1pbnN0YW5jZS9zZXR0aW5ncy8qfUKsAQoQY29tLm1lbW9zLmFwaS52MUIUSW5zdGFuY2VTZXJ2aWNlUHJvdG9QAVowZ2l0aHViLmNvbS91c2VtZW1vcy9tZW1vcy9wcm90by9nZW4vYXBpL3YxO2FwaXYxogIDTUFYqgIMTWVtb3MuQXBpLlYxygIMTWVtb3NcQXBpXFYx4gIYTWVtb3NcQXBpXFYxXEdQQk1ldGFkYXRh6gIOTWVtb3M6OkFwaTo6VjFiBnByb3RvMw", [file_google_api_annotations, file_google_api_client, file_google_api_field_behavior, file_google_api_resource, file_google_protobuf_field_mask]);
 
 /**
  * Instance profile message containing basic instance information.
@@ -112,6 +112,12 @@ export type InstanceSetting = Message<"memos.api.v1.InstanceSetting"> & {
      */
     value: InstanceSetting_MemoRelatedSetting;
     case: "memoRelatedSetting";
+  } | {
+    /**
+     * @generated from field: memos.api.v1.InstanceSetting.LLMSetting llm_setting = 5;
+     */
+    value: InstanceSetting_LLMSetting;
+    case: "llmSetting";
   } | { case: undefined; value?: undefined };
 };
 
@@ -400,6 +406,263 @@ export const InstanceSetting_MemoRelatedSettingSchema: GenMessage<InstanceSettin
   messageDesc(file_api_v1_instance_service, 2, 2);
 
 /**
+ * LLM/AI provider configuration settings.
+ * API keys are masked in responses (shown as ***masked*** if set).
+ *
+ * @generated from message memos.api.v1.InstanceSetting.LLMSetting
+ */
+export type InstanceSetting_LLMSetting = Message<"memos.api.v1.InstanceSetting.LLMSetting"> & {
+  /**
+   * The active LLM provider.
+   *
+   * @generated from field: memos.api.v1.InstanceSetting.LLMSetting.LLMProvider provider = 1;
+   */
+  provider: InstanceSetting_LLMSetting_LLMProvider;
+
+  /**
+   * OpenAI configuration.
+   *
+   * @generated from field: memos.api.v1.InstanceSetting.LLMOpenAIConfig openai_config = 2;
+   */
+  openaiConfig?: InstanceSetting_LLMOpenAIConfig;
+
+  /**
+   * Anthropic configuration.
+   *
+   * @generated from field: memos.api.v1.InstanceSetting.LLMAnthropicConfig anthropic_config = 3;
+   */
+  anthropicConfig?: InstanceSetting_LLMAnthropicConfig;
+
+  /**
+   * Gemini configuration.
+   *
+   * @generated from field: memos.api.v1.InstanceSetting.LLMGeminiConfig gemini_config = 4;
+   */
+  geminiConfig?: InstanceSetting_LLMGeminiConfig;
+
+  /**
+   * Ollama configuration.
+   *
+   * @generated from field: memos.api.v1.InstanceSetting.LLMOllamaConfig ollama_config = 5;
+   */
+  ollamaConfig?: InstanceSetting_LLMOllamaConfig;
+
+  /**
+   * enable_auto_tagging enables automatic tag suggestions for new memos.
+   *
+   * @generated from field: bool enable_auto_tagging = 10;
+   */
+  enableAutoTagging: boolean;
+
+  /**
+   * enable_auto_summary enables automatic summary generation.
+   *
+   * @generated from field: bool enable_auto_summary = 11;
+   */
+  enableAutoSummary: boolean;
+
+  /**
+   * enable_semantic_search enables vector-based semantic search.
+   *
+   * @generated from field: bool enable_semantic_search = 12;
+   */
+  enableSemanticSearch: boolean;
+};
+
+/**
+ * Describes the message memos.api.v1.InstanceSetting.LLMSetting.
+ * Use `create(InstanceSetting_LLMSettingSchema)` to create a new message.
+ */
+export const InstanceSetting_LLMSettingSchema: GenMessage<InstanceSetting_LLMSetting> = /*@__PURE__*/
+  messageDesc(file_api_v1_instance_service, 2, 3);
+
+/**
+ * LLM provider type enumeration.
+ *
+ * @generated from enum memos.api.v1.InstanceSetting.LLMSetting.LLMProvider
+ */
+export enum InstanceSetting_LLMSetting_LLMProvider {
+  /**
+   * @generated from enum value: LLM_PROVIDER_UNSPECIFIED = 0;
+   */
+  LLM_PROVIDER_UNSPECIFIED = 0,
+
+  /**
+   * OpenAI (GPT-4, GPT-3.5)
+   *
+   * @generated from enum value: OPENAI = 1;
+   */
+  OPENAI = 1,
+
+  /**
+   * Anthropic (Claude)
+   *
+   * @generated from enum value: ANTHROPIC = 2;
+   */
+  ANTHROPIC = 2,
+
+  /**
+   * Google AI (Gemini)
+   *
+   * @generated from enum value: GEMINI = 3;
+   */
+  GEMINI = 3,
+
+  /**
+   * Local Ollama
+   *
+   * @generated from enum value: OLLAMA = 4;
+   */
+  OLLAMA = 4,
+}
+
+/**
+ * Describes the enum memos.api.v1.InstanceSetting.LLMSetting.LLMProvider.
+ */
+export const InstanceSetting_LLMSetting_LLMProviderSchema: GenEnum<InstanceSetting_LLMSetting_LLMProvider> = /*@__PURE__*/
+  enumDesc(file_api_v1_instance_service, 2, 3, 0);
+
+/**
+ * OpenAI-specific configuration.
+ *
+ * @generated from message memos.api.v1.InstanceSetting.LLMOpenAIConfig
+ */
+export type InstanceSetting_LLMOpenAIConfig = Message<"memos.api.v1.InstanceSetting.LLMOpenAIConfig"> & {
+  /**
+   * API key for OpenAI (masked in responses if set).
+   *
+   * @generated from field: string api_key = 1;
+   */
+  apiKey: string;
+
+  /**
+   * Base URL for API requests (for Azure OpenAI or custom endpoints).
+   *
+   * @generated from field: string base_url = 2;
+   */
+  baseUrl: string;
+
+  /**
+   * Default model for chat completion (e.g., "gpt-4o-mini", "gpt-4").
+   *
+   * @generated from field: string default_model = 3;
+   */
+  defaultModel: string;
+
+  /**
+   * Default model for embeddings (e.g., "text-embedding-3-small").
+   *
+   * @generated from field: string embedding_model = 4;
+   */
+  embeddingModel: string;
+};
+
+/**
+ * Describes the message memos.api.v1.InstanceSetting.LLMOpenAIConfig.
+ * Use `create(InstanceSetting_LLMOpenAIConfigSchema)` to create a new message.
+ */
+export const InstanceSetting_LLMOpenAIConfigSchema: GenMessage<InstanceSetting_LLMOpenAIConfig> = /*@__PURE__*/
+  messageDesc(file_api_v1_instance_service, 2, 4);
+
+/**
+ * Anthropic-specific configuration.
+ *
+ * @generated from message memos.api.v1.InstanceSetting.LLMAnthropicConfig
+ */
+export type InstanceSetting_LLMAnthropicConfig = Message<"memos.api.v1.InstanceSetting.LLMAnthropicConfig"> & {
+  /**
+   * API key for Anthropic (masked in responses if set).
+   *
+   * @generated from field: string api_key = 1;
+   */
+  apiKey: string;
+
+  /**
+   * Base URL for API requests.
+   *
+   * @generated from field: string base_url = 2;
+   */
+  baseUrl: string;
+
+  /**
+   * Default model for chat completion (e.g., "claude-3-5-sonnet-20241022").
+   *
+   * @generated from field: string default_model = 3;
+   */
+  defaultModel: string;
+};
+
+/**
+ * Describes the message memos.api.v1.InstanceSetting.LLMAnthropicConfig.
+ * Use `create(InstanceSetting_LLMAnthropicConfigSchema)` to create a new message.
+ */
+export const InstanceSetting_LLMAnthropicConfigSchema: GenMessage<InstanceSetting_LLMAnthropicConfig> = /*@__PURE__*/
+  messageDesc(file_api_v1_instance_service, 2, 5);
+
+/**
+ * Google AI Gemini-specific configuration.
+ *
+ * @generated from message memos.api.v1.InstanceSetting.LLMGeminiConfig
+ */
+export type InstanceSetting_LLMGeminiConfig = Message<"memos.api.v1.InstanceSetting.LLMGeminiConfig"> & {
+  /**
+   * API key for Google AI (masked in responses if set).
+   *
+   * @generated from field: string api_key = 1;
+   */
+  apiKey: string;
+
+  /**
+   * Default model (e.g., "gemini-1.5-flash", "gemini-1.5-pro").
+   *
+   * @generated from field: string default_model = 2;
+   */
+  defaultModel: string;
+};
+
+/**
+ * Describes the message memos.api.v1.InstanceSetting.LLMGeminiConfig.
+ * Use `create(InstanceSetting_LLMGeminiConfigSchema)` to create a new message.
+ */
+export const InstanceSetting_LLMGeminiConfigSchema: GenMessage<InstanceSetting_LLMGeminiConfig> = /*@__PURE__*/
+  messageDesc(file_api_v1_instance_service, 2, 6);
+
+/**
+ * Ollama-specific configuration.
+ *
+ * @generated from message memos.api.v1.InstanceSetting.LLMOllamaConfig
+ */
+export type InstanceSetting_LLMOllamaConfig = Message<"memos.api.v1.InstanceSetting.LLMOllamaConfig"> & {
+  /**
+   * Host address for Ollama server (e.g., "http://localhost:11434").
+   *
+   * @generated from field: string host = 1;
+   */
+  host: string;
+
+  /**
+   * Default model for chat completion (e.g., "llama3.2", "mistral").
+   *
+   * @generated from field: string default_model = 2;
+   */
+  defaultModel: string;
+
+  /**
+   * Default model for embeddings (e.g., "nomic-embed-text").
+   *
+   * @generated from field: string embedding_model = 3;
+   */
+  embeddingModel: string;
+};
+
+/**
+ * Describes the message memos.api.v1.InstanceSetting.LLMOllamaConfig.
+ * Use `create(InstanceSetting_LLMOllamaConfigSchema)` to create a new message.
+ */
+export const InstanceSetting_LLMOllamaConfigSchema: GenMessage<InstanceSetting_LLMOllamaConfig> = /*@__PURE__*/
+  messageDesc(file_api_v1_instance_service, 2, 7);
+
+/**
  * Enumeration of instance setting keys.
  *
  * @generated from enum memos.api.v1.InstanceSetting.Key
@@ -430,6 +693,13 @@ export enum InstanceSetting_Key {
    * @generated from enum value: MEMO_RELATED = 3;
    */
   MEMO_RELATED = 3,
+
+  /**
+   * LLM is the key for LLM/AI settings.
+   *
+   * @generated from enum value: LLM = 4;
+   */
+  LLM = 4,
 }
 
 /**
