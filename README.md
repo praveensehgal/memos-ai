@@ -99,12 +99,20 @@ pnpm run dev
 
 ## Roadmap
 
-| Phase | Focus |
-|-------|-------|
-| Sprint 1 | Infrastructure & LLM Integration |
-| Sprint 2 | Auto-Tagging, Semantic Search, Code Intelligence |
-| Sprint 3 | UI/UX Polish |
-| Sprint 4-6 | Beta Testing & Launch |
+| Phase | Focus | Status |
+|-------|-------|--------|
+| Sprint 1 | Infrastructure & LLM Integration | Completed |
+| Sprint 2 | Auto-Tagging, Semantic Search, Code Intelligence | In Progress |
+| Sprint 3 | UI/UX Polish | Planned |
+| Sprint 4-6 | Beta Testing & Launch | Planned |
+
+### Sprint 1 Completed Features
+- CI/CD pipeline with GitHub Actions
+- Docker multi-stage build optimization
+- LLM provider abstraction layer (OpenAI, Anthropic, Gemini, Ollama)
+- Secure API key management with AES-256-GCM encryption
+- Tag suggestion service with caching and rate limiting
+- EC2 deployment with HTTPS (memo.formsight.ai)
 
 ## Acknowledgments
 

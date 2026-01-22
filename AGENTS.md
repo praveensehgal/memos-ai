@@ -543,8 +543,42 @@ Backend supports pluggable components in `plugin/`:
 | `markdown` | Markdown parsing (goldmark) |
 | `httpgetter` | HTTP content fetching |
 | `storage/s3` | S3-compatible storage |
+| `llm` | LLM provider integration for AI features |
 
 Each plugin has its own README with usage examples.
+
+### LLM Plugin Details
+
+The `llm` plugin provides AI-powered features through multiple LLM provider support:
+
+**Supported Providers:**
+- OpenAI (GPT-4, GPT-3.5-turbo)
+- Anthropic (Claude models)
+- Google Gemini
+- Ollama (local models)
+
+**Key Components:**
+
+| File | Purpose |
+|------|---------|
+| `service.go` | Core LLM service interface and types |
+| `openai_provider.go` | OpenAI API integration |
+| `ollama_provider.go` | Ollama local model integration |
+| `tag_service.go` | AI tag suggestion service with caching |
+| `crypto.go` | AES-256-GCM encryption for API keys |
+| `key_storage.go` | Secure API key storage management |
+
+**Tag Service Features:**
+- Caching: 15-minute TTL, 1000 max entries
+- Rate limiting: 60 requests/minute per user
+- Async job processing: 2 workers, 100 queue size
+- Cache eviction: LRU with TTL-based cleanup
+
+**API Key Security:**
+- AES-256-GCM encryption at rest
+- SHA-256 based key ID generation
+- Provider-specific format validation
+- Masked display (e.g., `****abcd`)
 
 ## Performance Considerations
 
@@ -570,3 +604,4 @@ Each plugin has its own README with usage examples.
 - CORS enabled for all origins (configure for production)
 - Input validation at service layer
 - SQL injection prevention via parameterized queries
+- LLM API keys encrypted with AES-256-GCM (BYOK - Bring Your Own Key model)
