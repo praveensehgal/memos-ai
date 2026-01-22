@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  memos-ai:
+    image: ghcr.io/praveensehgal/memos-ai:${IMAGE_TAG:-canary}
+    container_name: memos-ai
+    restart: unless-stopped
+    ports:
+      - "5230:5230"
+    volumes:
+      - memos-data:/var/opt/memos
+    environment:
+      - TZ=${TZ:-UTC}
+      - MEMOS_PORT=5230
+      - MEMOS_MODE=${MEMOS_MODE:-prod}
+      # AI Provider configuration (optional)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY:-}
+      - OLLAMA_HOST=${OLLAMA_HOST:-}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5230/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  memos-data:
+    driver: local

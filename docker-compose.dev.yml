@@ -1,0 +1,41 @@
+version: "3.8"
+
+# Development docker-compose file
+# Usage: docker compose -f docker-compose.dev.yml up --build
+
+services:
+  memos-ai-dev:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile
+    container_name: memos-ai-dev
+    ports:
+      - "5230:5230"
+    volumes:
+      - ./data:/var/opt/memos
+    environment:
+      - TZ=UTC
+      - MEMOS_PORT=5230
+      - MEMOS_MODE=dev
+      # AI Provider configuration for development
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY:-}
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Optional: Local Ollama for AI features
+  ollama:
+    image: ollama/ollama:latest
+    container_name: memos-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    profiles:
+      - ollama
+
+volumes:
+  ollama-data:
+    driver: local
