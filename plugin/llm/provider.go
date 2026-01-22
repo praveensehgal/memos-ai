@@ -231,6 +231,9 @@ type ProviderConfig struct {
 	// DefaultModel is the model to use when not specified.
 	DefaultModel string `json:"default_model,omitempty"`
 
+	// EmbeddingModel is the model to use for embeddings.
+	EmbeddingModel string `json:"embedding_model,omitempty"`
+
 	// OllamaHost is the Ollama server address (only for Ollama provider).
 	OllamaHost string `json:"ollama_host,omitempty"`
 
