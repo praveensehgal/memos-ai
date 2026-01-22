@@ -14,6 +14,8 @@ enum InstanceSettingKey {
   STORAGE = 3;
   // MEMO_RELATED is the key for memo related settings.
   MEMO_RELATED = 4;
+  // LLM is the key for LLM/AI settings.
+  LLM = 5;
 }
 
 message InstanceSetting {
@@ -23,6 +25,7 @@ message InstanceSetting {
     InstanceGeneralSetting general_setting = 3;
     InstanceStorageSetting storage_setting = 4;
     InstanceMemoRelatedSetting memo_related_setting = 5;
+    InstanceLLMSetting llm_setting = 6;
   }
 }
 
@@ -102,4 +105,84 @@ message InstanceMemoRelatedSetting {
   bool enable_double_click_edit = 4;
   // reactions is the list of reactions.
   repeated string reactions = 7;
+}
+
+// InstanceLLMSetting contains LLM/AI provider configuration.
+message InstanceLLMSetting {
+  // LLMProvider identifies the LLM provider type.
+  enum LLMProvider {
+    LLM_PROVIDER_UNSPECIFIED = 0;
+    // OpenAI (GPT-4, GPT-3.5)
+    OPENAI = 1;
+    // Anthropic (Claude)
+    ANTHROPIC = 2;
+    // Google AI (Gemini)
+    GEMINI = 3;
+    // Local Ollama
+    OLLAMA = 4;
+  }
+
+  // The active LLM provider.
+  LLMProvider provider = 1;
+
+  // OpenAI configuration.
+  LLMOpenAIConfig openai_config = 2;
+
+  // Anthropic configuration.
+  LLMAnthropicConfig anthropic_config = 3;
+
+  // Gemini configuration.
+  LLMGeminiConfig gemini_config = 4;
+
+  // Ollama configuration.
+  LLMOllamaConfig ollama_config = 5;
+
+  // enable_auto_tagging enables automatic tag suggestions for new memos.
+  bool enable_auto_tagging = 10;
+
+  // enable_auto_summary enables automatic summary generation.
+  bool enable_auto_summary = 11;
+
+  // enable_semantic_search enables vector-based semantic search.
+  bool enable_semantic_search = 12;
+}
+
+// LLMOpenAIConfig contains OpenAI-specific configuration.
+message LLMOpenAIConfig {
+  // API key for OpenAI (encrypted at rest).
+  string api_key = 1;
+  // Base URL for API requests (for Azure OpenAI or custom endpoints).
+  string base_url = 2;
+  // Default model for chat completion (e.g., "gpt-4o-mini", "gpt-4").
+  string default_model = 3;
+  // Default model for embeddings (e.g., "text-embedding-3-small").
+  string embedding_model = 4;
+}
+
+// LLMAnthropicConfig contains Anthropic-specific configuration.
+message LLMAnthropicConfig {
+  // API key for Anthropic (encrypted at rest).
+  string api_key = 1;
+  // Base URL for API requests.
+  string base_url = 2;
+  // Default model for chat completion (e.g., "claude-3-5-sonnet-20241022").
+  string default_model = 3;
+}
+
+// LLMGeminiConfig contains Google AI Gemini-specific configuration.
+message LLMGeminiConfig {
+  // API key for Google AI (encrypted at rest).
+  string api_key = 1;
+  // Default model (e.g., "gemini-1.5-flash", "gemini-1.5-pro").
+  string default_model = 2;
+}
+
+// LLMOllamaConfig contains Ollama-specific configuration.
+message LLMOllamaConfig {
+  // Host address for Ollama server (e.g., "http://localhost:11434").
+  string host = 1;
+  // Default model for chat completion (e.g., "llama3.2", "mistral").
+  string default_model = 2;
+  // Default model for embeddings (e.g., "nomic-embed-text").
+  string embedding_model = 3;
 }
