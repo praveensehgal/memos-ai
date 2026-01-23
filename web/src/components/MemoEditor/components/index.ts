@@ -1,5 +1,6 @@
 // UI components for MemoEditor
 
+export { AITagSuggestions } from "./AITagSuggestions";
 export { default as AttachmentList } from "./AttachmentList";
 export * from "./EditorContent";
 export * from "./EditorMetadata";

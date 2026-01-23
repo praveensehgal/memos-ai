@@ -74,6 +74,7 @@
     "properties": "Properties",
     "referenced-by": "Referenced by",
     "referencing": "Referencing",
+    "refresh": "Refresh",
     "relations": "Relations",
     "remember-me": "Remember me",
     "rename": "Rename",
@@ -125,7 +126,15 @@
     "no-changes-detected": "No changes detected",
     "focus-mode": "Focus Mode",
     "exit-focus-mode": "Exit Focus Mode",
-    "slash-commands": "Type `/` for commands"
+    "slash-commands": "Type `/` for commands",
+    "ai-suggest-tags": "AI Tag Suggestions",
+    "ai-suggest-tags-content-too-short": "Add more content to get AI tag suggestions",
+    "ai-tag-suggestions": "AI Tag Suggestions",
+    "ai-generating-tags": "Generating tags...",
+    "ai-not-configured": "AI is not configured. Go to Settings to set up your LLM provider.",
+    "ai-no-suggestions": "No tag suggestions available",
+    "ai-apply-tags": "Apply {{count}} tag(s)",
+    "ai-click-to-select": "Click tags to select, then apply"
   },
   "filters": {
     "has-code": "hasCode",
