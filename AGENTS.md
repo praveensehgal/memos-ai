@@ -67,6 +67,7 @@ web/
 │   │   ├── useMemoQueries.ts    # Memo CRUD, pagination
 │   │   ├── useUserQueries.ts    # User operations
 │   │   ├── useAttachmentQueries.ts # Attachment operations
+│   │   ├── useAITagSuggestions.ts # AI tag suggestion mutation
 │   │   └── ...
 │   ├── lib/            # Utilities
 │   │   ├── query-client.ts  # React Query v5 client
