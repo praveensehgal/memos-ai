@@ -71,6 +71,8 @@ const (
 	// MemoServiceDeleteMemoReactionProcedure is the fully-qualified name of the MemoService's
 	// DeleteMemoReaction RPC.
 	MemoServiceDeleteMemoReactionProcedure = "/memos.api.v1.MemoService/DeleteMemoReaction"
+	// MemoServiceSuggestTagsProcedure is the fully-qualified name of the MemoService's SuggestTags RPC.
+	MemoServiceSuggestTagsProcedure = "/memos.api.v1.MemoService/SuggestTags"
 )
 
 // MemoServiceClient is a client for the memos.api.v1.MemoService service.
@@ -103,6 +105,9 @@ type MemoServiceClient interface {
 	UpsertMemoReaction(context.Context, *connect.Request[v1.UpsertMemoReactionRequest]) (*connect.Response[v1.Reaction], error)
 	// DeleteMemoReaction deletes a reaction for a memo.
 	DeleteMemoReaction(context.Context, *connect.Request[v1.DeleteMemoReactionRequest]) (*connect.Response[emptypb.Empty], error)
+	// SuggestTags suggests AI-generated tags for memo content.
+	// Requires LLM to be configured in instance settings.
+	SuggestTags(context.Context, *connect.Request[v1.SuggestTagsRequest]) (*connect.Response[v1.SuggestTagsResponse], error)
 }
 
 // NewMemoServiceClient constructs a client for the memos.api.v1.MemoService service. By default, it
@@ -200,6 +205,12 @@ func NewMemoServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(memoServiceMethods.ByName("DeleteMemoReaction")),
 			connect.WithClientOptions(opts...),
 		),
+		suggestTags: connect.NewClient[v1.SuggestTagsRequest, v1.SuggestTagsResponse](
+			httpClient,
+			baseURL+MemoServiceSuggestTagsProcedure,
+			connect.WithSchema(memoServiceMethods.ByName("SuggestTags")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -219,6 +230,7 @@ type memoServiceClient struct {
 	listMemoReactions   *connect.Client[v1.ListMemoReactionsRequest, v1.ListMemoReactionsResponse]
 	upsertMemoReaction  *connect.Client[v1.UpsertMemoReactionRequest, v1.Reaction]
 	deleteMemoReaction  *connect.Client[v1.DeleteMemoReactionRequest, emptypb.Empty]
+	suggestTags         *connect.Client[v1.SuggestTagsRequest, v1.SuggestTagsResponse]
 }
 
 // CreateMemo calls memos.api.v1.MemoService.CreateMemo.
@@ -291,6 +303,11 @@ func (c *memoServiceClient) DeleteMemoReaction(ctx context.Context, req *connect
 	return c.deleteMemoReaction.CallUnary(ctx, req)
 }
 
+// SuggestTags calls memos.api.v1.MemoService.SuggestTags.
+func (c *memoServiceClient) SuggestTags(ctx context.Context, req *connect.Request[v1.SuggestTagsRequest]) (*connect.Response[v1.SuggestTagsResponse], error) {
+	return c.suggestTags.CallUnary(ctx, req)
+}
+
 // MemoServiceHandler is an implementation of the memos.api.v1.MemoService service.
 type MemoServiceHandler interface {
 	// CreateMemo creates a memo.
@@ -321,6 +338,9 @@ type MemoServiceHandler interface {
 	UpsertMemoReaction(context.Context, *connect.Request[v1.UpsertMemoReactionRequest]) (*connect.Response[v1.Reaction], error)
 	// DeleteMemoReaction deletes a reaction for a memo.
 	DeleteMemoReaction(context.Context, *connect.Request[v1.DeleteMemoReactionRequest]) (*connect.Response[emptypb.Empty], error)
+	// SuggestTags suggests AI-generated tags for memo content.
+	// Requires LLM to be configured in instance settings.
+	SuggestTags(context.Context, *connect.Request[v1.SuggestTagsRequest]) (*connect.Response[v1.SuggestTagsResponse], error)
 }
 
 // NewMemoServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -414,6 +434,12 @@ func NewMemoServiceHandler(svc MemoServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(memoServiceMethods.ByName("DeleteMemoReaction")),
 		connect.WithHandlerOptions(opts...),
 	)
+	memoServiceSuggestTagsHandler := connect.NewUnaryHandler(
+		MemoServiceSuggestTagsProcedure,
+		svc.SuggestTags,
+		connect.WithSchema(memoServiceMethods.ByName("SuggestTags")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/memos.api.v1.MemoService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MemoServiceCreateMemoProcedure:
@@ -444,6 +470,8 @@ func NewMemoServiceHandler(svc MemoServiceHandler, opts ...connect.HandlerOption
 			memoServiceUpsertMemoReactionHandler.ServeHTTP(w, r)
 		case MemoServiceDeleteMemoReactionProcedure:
 			memoServiceDeleteMemoReactionHandler.ServeHTTP(w, r)
+		case MemoServiceSuggestTagsProcedure:
+			memoServiceSuggestTagsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -507,4 +535,8 @@ func (UnimplementedMemoServiceHandler) UpsertMemoReaction(context.Context, *conn
 
 func (UnimplementedMemoServiceHandler) DeleteMemoReaction(context.Context, *connect.Request[v1.DeleteMemoReactionRequest]) (*connect.Response[emptypb.Empty], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("memos.api.v1.MemoService.DeleteMemoReaction is not implemented"))
+}
+
+func (UnimplementedMemoServiceHandler) SuggestTags(context.Context, *connect.Request[v1.SuggestTagsRequest]) (*connect.Response[v1.SuggestTagsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("memos.api.v1.MemoService.SuggestTags is not implemented"))
 }

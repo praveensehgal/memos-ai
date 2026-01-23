@@ -103,6 +103,15 @@ service MemoService {
     option (google.api.http) = {delete: "/api/v1/{name=memos/*/reactions/*}"};
     option (google.api.method_signature) = "name";
   }
+
+  // SuggestTags suggests AI-generated tags for memo content.
+  // Requires LLM to be configured in instance settings.
+  rpc SuggestTags(SuggestTagsRequest) returns (SuggestTagsResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/memos:suggestTags"
+      body: "*"
+    };
+  }
 }
 
 enum Visibility {
@@ -508,4 +517,37 @@ message DeleteMemoReactionRequest {
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "memos.api.v1/Reaction"}
   ];
+}
+
+// Request message for SuggestTags RPC.
+message SuggestTagsRequest {
+  // Required. The memo content to analyze for tag suggestions.
+  string content = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Existing tags in the system to consider for consistency.
+  // The AI will prefer suggesting existing tags when relevant.
+  repeated string existing_tags = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Maximum number of tags to suggest.
+  // Default is 5, maximum is 10.
+  int32 max_tags = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response message for SuggestTags RPC.
+message SuggestTagsResponse {
+  // The suggested tags for the content.
+  repeated TagSuggestion suggestions = 1;
+}
+
+// A single tag suggestion with optional confidence score.
+message TagSuggestion {
+  // The suggested tag name (without # prefix).
+  string tag = 1;
+
+  // Confidence score for this suggestion (0.0-1.0).
+  // Higher values indicate stronger relevance to the content.
+  double confidence = 2;
+
+  // Whether this tag already exists in the system.
+  bool is_existing = 3;
 }

@@ -1054,6 +1054,33 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /api/v1/memos:suggestTags:
+        post:
+            tags:
+                - MemoService
+            description: |-
+                SuggestTags suggests AI-generated tags for memo content.
+                 Requires LLM to be configured in instance settings.
+            operationId: MemoService_SuggestTags
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SuggestTagsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SuggestTagsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /api/v1/users:
         get:
             tags:
@@ -2925,6 +2952,53 @@ components:
             description: |-
                 S3 configuration for cloud storage backend.
                  Reference: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-go/
+        SuggestTagsRequest:
+            required:
+                - content
+            type: object
+            properties:
+                content:
+                    type: string
+                    description: Required. The memo content to analyze for tag suggestions.
+                existingTags:
+                    type: array
+                    items:
+                        type: string
+                    description: |-
+                        Optional. Existing tags in the system to consider for consistency.
+                         The AI will prefer suggesting existing tags when relevant.
+                maxTags:
+                    type: integer
+                    description: |-
+                        Optional. Maximum number of tags to suggest.
+                         Default is 5, maximum is 10.
+                    format: int32
+            description: Request message for SuggestTags RPC.
+        SuggestTagsResponse:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TagSuggestion'
+                    description: The suggested tags for the content.
+            description: Response message for SuggestTags RPC.
+        TagSuggestion:
+            type: object
+            properties:
+                tag:
+                    type: string
+                    description: 'The suggested tag name (without # prefix).'
+                confidence:
+                    type: number
+                    description: |-
+                        Confidence score for this suggestion (0.0-1.0).
+                         Higher values indicate stronger relevance to the content.
+                    format: double
+                isExisting:
+                    type: boolean
+                    description: Whether this tag already exists in the system.
+            description: A single tag suggestion with optional confidence score.
         UpsertMemoReactionRequest:
             required:
                 - name

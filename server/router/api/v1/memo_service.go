@@ -14,6 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/usememos/memos/internal/base"
+	"github.com/usememos/memos/plugin/llm"
 	"github.com/usememos/memos/plugin/webhook"
 	v1pb "github.com/usememos/memos/proto/gen/api/v1"
 	storepb "github.com/usememos/memos/proto/gen/store"
@@ -826,4 +827,101 @@ func (*APIV1Service) parseMemoOrderBy(orderBy string, memoFind *store.FindMemo) 
 	}
 
 	return nil
+}
+
+// SuggestTags suggests AI-generated tags for memo content.
+// Requires LLM to be configured in instance settings.
+func (s *APIV1Service) SuggestTags(ctx context.Context, request *v1pb.SuggestTagsRequest) (*v1pb.SuggestTagsResponse, error) {
+	// Validate user is authenticated
+	user, err := s.fetchCurrentUser(ctx)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get user")
+	}
+	if user == nil {
+		return nil, status.Errorf(codes.Unauthenticated, "user not authenticated")
+	}
+
+	// Validate content is provided
+	content := strings.TrimSpace(request.GetContent())
+	if content == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "content is required")
+	}
+
+	// Get LLM settings from store
+	llmSetting, err := s.Store.GetInstanceLLMSetting(ctx)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get LLM settings: %v", err)
+	}
+	if llmSetting == nil {
+		return nil, status.Errorf(codes.FailedPrecondition, "LLM is not configured")
+	}
+
+	// Check if auto-tagging is enabled
+	if !llmSetting.EnableAutoTagging {
+		return nil, status.Errorf(codes.FailedPrecondition, "AI tag suggestions are disabled")
+	}
+
+	// Create LLM service and load configuration
+	llmService := llm.NewService()
+	configManager := llm.NewConfigManager(llmService)
+	if err := configManager.LoadFromProto(ctx, llmSetting); err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to load LLM configuration: %v", err)
+	}
+
+	// Verify a provider is available
+	if !llmService.IsConfigured(ctx) {
+		return nil, status.Errorf(codes.FailedPrecondition, "no LLM provider is configured")
+	}
+
+	// Prepare max tags (default to 5 if not specified)
+	maxTags := int(request.GetMaxTags())
+	if maxTags <= 0 {
+		maxTags = 5
+	}
+	if maxTags > 10 {
+		maxTags = 10
+	}
+
+	// Call LLM service to suggest tags
+	suggestReq := &llm.SuggestTagsRequest{
+		Content:      content,
+		ExistingTags: request.GetExistingTags(),
+		MaxTags:      maxTags,
+	}
+
+	suggestResp, err := llmService.SuggestTags(ctx, suggestReq)
+	if err != nil {
+		if errors.Is(err, llm.ErrProviderNotConfigured) {
+			return nil, status.Errorf(codes.FailedPrecondition, "LLM provider is not configured")
+		}
+		if errors.Is(err, llm.ErrRateLimited) {
+			return nil, status.Errorf(codes.ResourceExhausted, "rate limit exceeded, please try again later")
+		}
+		slog.Error("failed to suggest tags", slog.Any("error", err))
+		return nil, status.Errorf(codes.Internal, "failed to generate tag suggestions")
+	}
+
+	// Convert response to proto format
+	suggestions := make([]*v1pb.TagSuggestion, 0, len(suggestResp.Tags))
+	existingTagSet := make(map[string]bool)
+	for _, tag := range request.GetExistingTags() {
+		existingTagSet[strings.ToLower(tag)] = true
+	}
+
+	for i, tag := range suggestResp.Tags {
+		confidence := 0.8 // default confidence
+		if i < len(suggestResp.Confidence) {
+			confidence = suggestResp.Confidence[i]
+		}
+
+		suggestions = append(suggestions, &v1pb.TagSuggestion{
+			Tag:        tag,
+			Confidence: confidence,
+			IsExisting: existingTagSet[strings.ToLower(tag)],
+		})
+	}
+
+	return &v1pb.SuggestTagsResponse{
+		Suggestions: suggestions,
+	}, nil
 }
