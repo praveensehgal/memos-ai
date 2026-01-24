@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { MemoRelation_Type } from "@/types/proto/api/v1/memo_service_pb";
 import { useTranslate } from "@/utils/i18n";
 import MemoContent from "../../MemoContent";
+import { extractTagsFromContent, TagPills } from "../../MemoContent/TagPills";
 import { MemoReactionListView } from "../../MemoReactionListView";
 import { useMemoViewContext } from "../MemoViewContext";
 import type { MemoBodyProps } from "../types";
@@ -13,6 +14,7 @@ const MemoBody: React.FC<MemoBodyProps> = ({ compact, onContentClick, onContentD
   const { memo, parentPage, showNSFWContent, nsfw } = useMemoViewContext();
 
   const referencedMemos = memo.relations.filter((relation) => relation.type === MemoRelation_Type.REFERENCE);
+  const tags = extractTagsFromContent(memo.content);
 
   return (
     <>
@@ -28,7 +30,9 @@ const MemoBody: React.FC<MemoBodyProps> = ({ compact, onContentClick, onContentD
           onClick={onContentClick}
           onDoubleClick={onContentDoubleClick}
           compact={memo.pinned ? false : compact} // Always show full content when pinned
+          hideTags={tags.length > 0}
         />
+        {tags.length > 0 && <TagPills tags={tags} />}
         <AttachmentList attachments={memo.attachments} />
         <RelationList relations={referencedMemos} currentMemoName={memo.name} parentPage={parentPage} />
         {memo.location && <LocationDisplay location={memo.location} />}

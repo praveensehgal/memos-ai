@@ -99,12 +99,49 @@ func (s *APIV1Service) UpdateInstanceSetting(ctx context.Context, request *v1pb.
 	_ = request.UpdateMask
 
 	updateSetting := convertInstanceSettingToStore(request.Setting)
+
+	// For LLM settings, preserve existing API keys if the incoming value is empty or masked
+	if updateSetting.Key == storepb.InstanceSettingKey_LLM {
+		existingLLMSetting, err := s.Store.GetInstanceLLMSetting(ctx)
+		if err == nil && existingLLMSetting != nil {
+			newLLMSetting := updateSetting.GetLlmSetting()
+			if newLLMSetting != nil {
+				preserveExistingAPIKeys(newLLMSetting, existingLLMSetting)
+			}
+		}
+	}
+
 	instanceSetting, err := s.Store.UpsertInstanceSetting(ctx, updateSetting)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to upsert instance setting: %v", err)
 	}
 
 	return convertInstanceSettingFromStore(instanceSetting), nil
+}
+
+// preserveExistingAPIKeys preserves existing API keys when the incoming value is empty or masked.
+// This prevents accidental loss of API keys when users save settings without re-entering them.
+func preserveExistingAPIKeys(newSetting, existingSetting *storepb.InstanceLLMSetting) {
+	// Preserve OpenAI API key
+	if newSetting.OpenaiConfig != nil && existingSetting.OpenaiConfig != nil {
+		if newSetting.OpenaiConfig.ApiKey == "" || newSetting.OpenaiConfig.ApiKey == maskedAPIKey {
+			newSetting.OpenaiConfig.ApiKey = existingSetting.OpenaiConfig.ApiKey
+		}
+	}
+
+	// Preserve Anthropic API key
+	if newSetting.AnthropicConfig != nil && existingSetting.AnthropicConfig != nil {
+		if newSetting.AnthropicConfig.ApiKey == "" || newSetting.AnthropicConfig.ApiKey == maskedAPIKey {
+			newSetting.AnthropicConfig.ApiKey = existingSetting.AnthropicConfig.ApiKey
+		}
+	}
+
+	// Preserve Gemini API key
+	if newSetting.GeminiConfig != nil && existingSetting.GeminiConfig != nil {
+		if newSetting.GeminiConfig.ApiKey == "" || newSetting.GeminiConfig.ApiKey == maskedAPIKey {
+			newSetting.GeminiConfig.ApiKey = existingSetting.GeminiConfig.ApiKey
+		}
+	}
 }
 
 func convertInstanceSettingFromStore(setting *storepb.InstanceSetting) *v1pb.InstanceSetting {

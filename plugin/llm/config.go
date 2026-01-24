@@ -44,6 +44,13 @@ func (m *ConfigManager) LoadFromProto(ctx context.Context, setting *storepb.Inst
 		}
 	}
 
+	if config := setting.GetAnthropicConfig(); config != nil {
+		provider := NewAnthropicProviderFromProto(config)
+		if err := m.service.RegisterProvider(provider); err != nil {
+			slog.Warn("Failed to register Anthropic provider", slog.Any("error", err))
+		}
+	}
+
 	// Set the active provider if specified
 	if setting.Provider != storepb.InstanceLLMSetting_LLM_PROVIDER_UNSPECIFIED {
 		providerType := protoProviderToType(setting.Provider)
@@ -82,6 +89,12 @@ func (m *ConfigManager) ToProto() *storepb.InstanceLLMSetting {
 			if provider, err := m.service.GetProviderByType(ProviderOllama); err == nil {
 				if ollama, ok := provider.(*OllamaProvider); ok {
 					setting.OllamaConfig = ollama.ToProto()
+				}
+			}
+		case ProviderAnthropic:
+			if provider, err := m.service.GetProviderByType(ProviderAnthropic); err == nil {
+				if anthropic, ok := provider.(*AnthropicProvider); ok {
+					setting.AnthropicConfig = anthropic.ToProto()
 				}
 			}
 		}

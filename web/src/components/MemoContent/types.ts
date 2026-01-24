@@ -7,6 +7,7 @@ export interface MemoContentProps {
   contentClassName?: string;
   onClick?: (e: React.MouseEvent) => void;
   onDoubleClick?: (e: React.MouseEvent) => void;
+  hideTags?: boolean;
 }
 
 export type ContentCompactView = "ALL" | "SNIPPET";

@@ -58,6 +58,10 @@ const MemoContent = (props: MemoContentProps) => {
             span: ((spanProps: React.ComponentProps<"span"> & { node?: Element }) => {
               const { node, ...rest } = spanProps;
               if (node && isTagNode(node)) {
+                // Hide inline tags when hideTags is true (they'll be shown separately)
+                if (props.hideTags) {
+                  return null;
+                }
                 return <Tag {...spanProps} />;
               }
               return <span {...rest} />;
